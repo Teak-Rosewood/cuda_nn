@@ -4,6 +4,9 @@
 #include <omp.h>
 #include <cmath>
 
+#ifndef Tensor_H
+#define Tensor_H
+
 using namespace std;
 
 template<typename T>
@@ -316,27 +319,27 @@ Tensor<T> Tensor<T>::copy()
 // }
 
 
-template<typename T>
-void Tensor<T>::inverse() {
-    int m = size.first;
-    int n = size.second;
+// template<typename T>
+// void Tensor<T>::inverse() {
+//     int m = size.first;
+//     int n = size.second;
 
-    if(!std::is_floating_point_v<T>)
-        cerr<"Inversion may result in incorrect truncation for integer tensors. Use convertFloat() to get accurate output."
+//     if(!std::is_floating_point_v<T>)
+//         cerr<"Inversion may result in incorrect truncation for integer tensors. Use convertFloat() to get accurate output."
 
-    for(int i =0;i<m;i++)
-    {
-        if(this->data[i][i] == 0.0)
-        {
-            throw std::runtime_error("Inversion not possible for singular matrices")
-        }
-        for(int j=i+1;j<m;j++)
-        {
+//     for(int i =0;i<m;i++)
+//     {
+//         if(this->data[i][i] == 0.0)
+//         {
+//             throw std::runtime_error("Inversion not possible for singular matrices")
+//         }
+//         for(int j=i+1;j<m;j++)
+//         {
             
-        }
-    }
+//         }
+//     }
 
-}
+// }
 
 template<typename T>
 Tensor<float> Tensor<T>::convertFloat()
@@ -357,3 +360,5 @@ Tensor<float> Tensor<T>::convertFloat()
 
     return Tensor<float>(floatTensor,this->size);
 }
+
+#endif

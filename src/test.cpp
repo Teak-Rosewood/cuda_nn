@@ -33,7 +33,4 @@ int main()
     // a.print();
     // cout<<endl;
     Tensor b = a.convertFloat().scalarMultiply(1.2);
-    b.print();
-    b.inverse();
-    b.print();
 }
