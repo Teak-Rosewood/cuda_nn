@@ -4,6 +4,7 @@
 #include <cstdlib>
 #include "Relu.hpp"
 #include "Linear.hpp"
+#include "Pipeline.hpp"
 
 using namespace std;
 
@@ -35,4 +36,10 @@ int main()
     // a.print();
     // cout<<endl;
     Tensor b = a.convertFloat().scalarMultiply(1.2);
+    Pipeline myPipeline;
+    Linear* l = new Linear(make_pair(1,1),make_pair(2,2));
+    Linear* q = new Linear(make_pair(2,2),make_pair(2,2));
+    myPipeline.add(l);
+    myPipeline.add(q);
+    myPipeline.printPipeline();
 }
