@@ -1,16 +1,27 @@
+// Linear.hpp
+#ifndef LINEAR_H
+#define LINEAR_H
+
 #include "Model.hpp"
-#include "Tensor.hpp"
 
-#ifndef Linear_H
-#define Linear_H
+class Linear : public Model {
+public:
+    Linear(int, int); // Constructor
+    Tensor<float> forward() override;
+    void backward() override;
+};
 
-class Linear : public Model
+Linear::Linear(int input_size, int output_size)
 {
-    public:
-        Tensor<float> forward() override;
+
 }
 
-Tensor<float> Linear::forward() override
+Tensor<float> Linear::forward()
+{
+
+}
+
+void Linear::backward()
 {
 
 }

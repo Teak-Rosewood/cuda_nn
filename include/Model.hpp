@@ -1,13 +1,12 @@
-#include "Tensor.hpp"
-
 #ifndef Model_H
 #define Model_H
 
-class Model
-{
-    public:
-        virtual Tensor<float> forward();
-        virtual void backward();
+#include "Tensor.hpp" 
+class Model {
+public:
+    virtual Tensor<float> forward() = 0;
+    virtual void backward() = 0;
+    virtual ~Model() {}
 };
 
 #endif

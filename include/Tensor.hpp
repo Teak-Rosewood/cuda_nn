@@ -1,11 +1,13 @@
+#ifndef Tensor_H
+#define Tensor_H
+
+#include <utility>
+#include "Tensor.hpp"
 #include <utility>
 #include <iostream>
 #include <stdexcept> 
 #include <omp.h>
 #include <cmath>
-
-#ifndef Tensor_H
-#define Tensor_H
 
 using namespace std;
 

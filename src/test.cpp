@@ -2,6 +2,8 @@
 #include "Tensor.hpp"
 #include <utility>
 #include <cstdlib>
+#include "Relu.hpp"
+#include "Linear.hpp"
 
 using namespace std;
 
