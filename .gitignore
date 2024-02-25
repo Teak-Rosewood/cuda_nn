@@ -24,6 +24,9 @@ CTestTestfile.cmake
 # Build directory
 build/
 
+# Lib Directory
+lib/
+
 # Ignore Visual Studio Code related files
 .vscode/
 
