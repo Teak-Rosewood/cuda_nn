@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import "./App.css";
 import { ModelManager, Layer } from "./Managers/ModelManger";
 import NewLayer from "./components/NewLayer";
@@ -9,18 +9,14 @@ function App() {
     const [layers, setLayers] = useState<Layer[]>([]);
     const [status, setStatus] = useState<string>("Dataset Upload");
     const [features, setFeatures] = useState<string[]>([]);
+    const [epochs, setEpochs] = useState<number>(0);
     const [file, setFile] = useState<File | null>(null);
     const [modelFile, setModelFile] = useState<File | null>(null);
-    const [disableDownload, setDisableDownload] = useState<boolean>(true);
-
-    const model = new ModelManager();
+    const [model, setModel] = useState<ModelManager>();
 
     useEffect(() => {
-        const fetchDatasetFeatures = async () => {
-            const new_feature = await model.getDatasetFeatures();
-            setFeatures(new_feature);
-        };
-        fetchDatasetFeatures();
+        const init_model = new ModelManager();
+        setModel(init_model);
     }, []);
 
     const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -33,24 +29,32 @@ function App() {
         }
     };
 
-    const UploadDataset = async () => {
+    const uploadDataset = async () => {
         if (file) {
             setStatus("Feature Selection");
-            const new_feature = await model.uploadDataset(file);
+            const new_feature = await model?.uploadDataset(file);
             setFeatures(new_feature);
         } else {
             setStatus("No file selected");
         }
     };
 
-    const fitModel = async() => {
-        setStatus("Model is Training...")
-        const new_model = await model.fitModel();
-        setModelFile(new_model);
-        setModelFile(file)
-        setDisableDownload(false);
-        setStatus("Model was fit with a loss of 0.000034");
-    }
+    const compileModel = async () => {
+        setStatus("Model is Compiling...");
+        const res = await model?.compileModel(layers);
+        setStatus(res);
+    };
+
+    const fitModel = async () => {
+        setStatus("Model is Training...");
+        if (epochs === 0) {
+            setStatus("Epochs has to be greater than 0");
+            return;
+        }
+        const res = await model?.fitModel(epochs);
+        // setModelFile(res.model);
+        setStatus(res.message);
+    };
 
     const downloadModel = () => {
         if (modelFile) {
@@ -61,8 +65,10 @@ function App() {
             document.body.appendChild(a);
             a.click();
             a.remove();
+        } else {
+            setStatus("Model has not been trained yet");
         }
-    } 
+    };
     return (
         <>
             <div className="p-4">
@@ -79,7 +85,7 @@ function App() {
                 />
                 <button
                     className="py-2.5 px-5 me-2 mb-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
-                    onClick={UploadDataset}
+                    onClick={uploadDataset}
                 >
                     Upload Dataset
                 </button>
@@ -90,9 +96,15 @@ function App() {
             <div className="p-4">
                 <h2>Build Your Model Structure</h2>
                 <div className="grid grid-cols-3 items-center">
-                    <NewLayer layers={layers} setLayers={setLayers} />
+                    <NewLayer layers={layers} setLayers={setLayers} setEpochs={setEpochs} />
                     <LayerList layers={layers} setLayers={setLayers} />
                 </div>
+                <button
+                    className="py-2.5 px-5 me-2 mb-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
+                    onClick={compileModel}
+                >
+                    Compile Model
+                </button>
                 <button
                     className="py-2.5 px-5 me-2 mb-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
                     onClick={fitModel}
@@ -101,7 +113,6 @@ function App() {
                 </button>
                 <button
                     className="py-2.5 px-5 me-2 mb-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
-                    disabled={disableDownload}
                     onClick={downloadModel}
                 >
                     Download Model

@@ -1,19 +1,18 @@
-import { useEffect, useState } from "react";
 import { ModelManager } from "../Managers/ModelManger";
 
 interface FeatureSelectorProps {
-    object: ModelManager;
+    object: ModelManager | undefined;
     setStatus: (status: string) => void;
     features: string[];
 }
 
 const FeatureSelector = ({ object, setStatus, features }: FeatureSelectorProps) => {
    
-    const setPredictionFeature = (feature: string) => {
-        const status = object.setPredictionFeature(feature);
+    const setPredictionFeature = async (feature: string) => {
+        const status = await object?.setPredictionFeature(feature);
         if (!status) {
             setStatus("Failed to set the prediction feature");
-        } else setStatus("Model Structure");
+        } else setStatus("Compile the Model");
     };
 
     if (features.length === 0)
@@ -29,7 +28,6 @@ const FeatureSelector = ({ object, setStatus, features }: FeatureSelectorProps) 
             <h2>Choose the value you want to predict</h2>
             {features.map((feature, index) => {
                 return (
-                    <>
                         <button
                             onClick={() => setPredictionFeature(feature)}
                             className="p-1 text-white bg-gray-800 hover:bg-gray-900 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-700 dark:border-gray-700"
@@ -37,7 +35,6 @@ const FeatureSelector = ({ object, setStatus, features }: FeatureSelectorProps) 
                         >
                             {feature}
                         </button>
-                    </>
                 );
             })}
         </div>

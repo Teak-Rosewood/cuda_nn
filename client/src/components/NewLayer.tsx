@@ -3,11 +3,11 @@ import { Layer } from "../Managers/ModelManger";
 interface NewLayerProp {
     layers: Layer[];
     setLayers: (layers: Layer[]) => void;
+    setEpochs: (epochs: number) => void;
 }
 let LAYER_ID = 1;
 
-const NewLayer = ({ layers, setLayers }: NewLayerProp) => {
-
+const NewLayer = ({ layers, setLayers, setEpochs }: NewLayerProp) => {
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         const newLayer: Layer = {
@@ -42,7 +42,17 @@ const NewLayer = ({ layers, setLayers }: NewLayerProp) => {
                 >
                     Add Layer
                 </button>
+                <label className="p-1">
+                Epochs:
+                <input
+                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-1 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                    type="number"
+                    name="epochs"
+                    onChange={(e) => setEpochs(e.target.valueAsNumber)}
+                />
+            </label>
             </form>
+            
         </>
     );
 };
