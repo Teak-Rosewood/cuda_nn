@@ -43,4 +43,31 @@ set (SOURCES
     src/model.cu
     src/main.cpp
 )
+
+set (MLFile 
+    include/Activation.hpp
+    include/Activation.hpp        
+    include/Linear.hpp
+    include/MSELoss.hpp    
+    include/Relu.hpp     
+    include/Tensor.hpp
+    include/Adam.hpp              
+    include/Loss.hpp     
+    include/Normalize.hpp  
+    include/RMSProp.hpp  
+    include/Variables.hpp
+    include/CrossEntropyLoss.hpp  
+    include/MAELoss.hpp  
+    include/Optimizer.hpp  
+    include/SGD.hpp
+    include/Flatten.hpp
+    include/Model.hpp    
+    include/Pipeline.hpp   
+    include/Softmax.hpp    
+    src/test.cpp
+)
+
 cuda_add_executable(main ${SOURCES})
+cuda_add_executable(test ${MLFile})
+cuda_add_library(main_shared SHARED ${SOURCES})
+cuda_add_library(test_shared SHARED ${MLFile})
