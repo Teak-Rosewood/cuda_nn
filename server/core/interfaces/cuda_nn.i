@@ -1,0 +1,41 @@
+%module cuda_nn
+
+%{
+#include "Activation.hpp"
+#include "Normalize.hpp"
+#include "Adam.hpp"         
+#include "Optimizer.hpp"
+#include "CrossEntropyLoss.hpp"
+#include "Pipeline.hpp"
+#include "Flatten.hpp"
+#include "Relu.hpp"
+#include "RMSProp.hpp"
+#include "Linear.hpp"
+#include "SGD.hpp"
+#include "Loss.hpp"
+#include "Softmax.hpp"
+#include "MAELoss.hpp"
+#include "Tensor.hpp"
+#include "Model.hpp"
+#include "Variables.hpp"
+%}
+
+%include "Activation.hpp"
+%include "Normalize.hpp"
+%include "Adam.hpp"         
+%include "Optimizer.hpp"
+%include "CrossEntropyLoss.hpp"
+%include "Pipeline.hpp"
+%include "Flatten.hpp"
+%include "Relu.hpp"
+%include "RMSProp.hpp"
+%include "Linear.hpp"
+%include "SGD.hpp"
+%include "Loss.hpp"
+%include "Softmax.hpp"
+%include "MAELoss.hpp"
+%include "Tensor.hpp"
+%include "Model.hpp"
+%include "Variables.hpp"
+
+%template(FloatTensor) Tensor<float>;

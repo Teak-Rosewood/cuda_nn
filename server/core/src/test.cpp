@@ -42,7 +42,7 @@ int main()
     myPipeline.printPipeline();
     SGD  optimizer(1e-4);
 
-    for(int j=0;j<5;j++)
+    for(int j=0;j<100;j++)
     {
         float loss = 0;
         for(int i=0;i<input_list.size();i++)

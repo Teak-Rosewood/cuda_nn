@@ -694,7 +694,7 @@ Tensor<int> Tensor<T>::randomTensor(std::pair<int,int> size)
         }
     }
 
-    Tensor<int> output = Tensor(data,size);
+    Tensor<int> output = Tensor<int>(data,size);
 
     for(int i=0;i<size.first;i++)
     {
@@ -718,7 +718,7 @@ Tensor<int> Tensor<T>::randomTensor(std::pair<int,int> size,int min,int max)
         }
     }
 
-    Tensor<int> output = Tensor(data,size);
+    Tensor<int> output = Tensor<int>(data,size);
 
     for(int i=0;i<size.first;i++)
     {
