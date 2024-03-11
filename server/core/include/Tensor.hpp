@@ -25,7 +25,7 @@ public:
     Tensor(T**, pair<int,int>);
     Tensor(const Tensor& other);
     Tensor(pair<int,int>,T);
-
+    Tensor() : data(nullptr), size(0, 0) {}
     static Tensor<T> readCSV(const std::string& filename);
 
     Tensor<T> Normalize();
@@ -71,8 +71,8 @@ public:
     void transpose();
     void OMPtranspose();
 
-    void inverse();
-    void OMPinverse();
+    // void inverse();
+    // void OMPinverse();
 
     void map(void (*func)(T*));
 
