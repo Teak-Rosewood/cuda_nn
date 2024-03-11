@@ -45,17 +45,17 @@ void Model::OMPbackward(Tensor<float> gradient,bool local)
 
 void Model::computeGradients(Tensor<float> last_gradient,Tensor<float>& gradient,bool local)
 {
-    Tensor<float> grad = Tensor(*inputs * last_gradient);
+    Tensor<float> grad = Tensor <float> (*inputs * last_gradient);
 
     if(local)
     {
         gradient.transpose();
-        gradients = new Tensor(grad * gradient);
+        gradients = new Tensor <float> (grad * gradient);
         gradient = grad;
     }
     else
     {
-        gradients = new Tensor(grad);
+        gradients = new Tensor <float> (grad);
         gradient = grad;
     }
 }
@@ -63,7 +63,7 @@ void Model::computeGradients(Tensor<float> last_gradient,Tensor<float>& gradient
 void Model::OMPcomputeGradients(Tensor<float> gradient,bool local)
 {
     inputs->transpose();
-    gradients = new Tensor(inputs->OMPmultiply(gradient));
+    gradients = new Tensor <float> (inputs->OMPmultiply(gradient));
 }
 
 Tensor<float> Model::getGradients()

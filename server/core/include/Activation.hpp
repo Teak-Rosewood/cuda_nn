@@ -9,6 +9,8 @@
 class Activation : public Model {
     public:
         Activation(std::pair<int,int>, const std::string& _type = "activation");
+        virtual Tensor<float> forward(Tensor<float>) = 0;
+        virtual Tensor<float> OMPforward(Tensor<float>) = 0;
         int getParamCount() override;
         std::pair<int,int> getInputSize() override;
         std::pair<int,int> getOutputSize() override;

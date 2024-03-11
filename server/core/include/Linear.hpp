@@ -55,7 +55,7 @@ Tensor<float> Linear::forward(Tensor<float> input)
 {
     // *inputs = input.copy();
     Tensor<float> next_val = input*(*weights);
-    inputs = new Tensor(input);
+    inputs = new Tensor <float> (input);
     inputs->transpose();
     isforward = true;
     return next_val;
@@ -65,7 +65,7 @@ Tensor<float> Linear::OMPforward(Tensor<float> input)
 {
     // *inputs = input.copy();
     Tensor<float> next_val = input.OMPmultiply(*weights);
-    inputs = new Tensor(input);
+    inputs = new Tensor<float>(input);
     inputs->transpose();
     isforward = true;
     return next_val;
