@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Documentation</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Madimi+One&family=Ojuju:wght@200..800&display=swap"
+        rel="stylesheet">
+</head>
+
+<body>
+    <div class="sidebar">
+        <div class="sidebar-header">Arachne</div>
+        <ul>
+            <li><a class="sidebar-main-header" href="#section1">Overview</a></li>
+            <li><a class="sidebar-main-header" href="#section2">Getting Started</a></li>
+            <li><a class="sidebar-main-header" href="#section3">Codeless setup</a></li>
+            <li><a class="sidebar-main-header" href="#section4">Tensor</a></li>
+            <li><a class="sidebar-main-header" href="#section5">Model layers</a></li>
+            <li><a class="sidebar-main-header" href="#section6">Activation layers</a></li>
+            <li><a class="sidebar-main-header" href="#section7">Loss functions</a></li>
+            <li><a class="sidebar-main-header" href="#section8">Optimizers</a></li>
+            <li><a class="sidebar-main-header" href="#section9">Pipeline</a></li>
+            <li><a class="sidebar-main-header" href="#section10">Examples</a></li>
+
+            <!-- Add more section links as needed -->
+        </ul>
+    </div>
+    <div class="content">
+        <div class="header">Arachne</div>
+        <h1 id="section1">Overview</h1>
+        <p>Arachne is a comprehensive deep learning library offering CUDA support for accelerated
+            computations on NVIDIA
+            GPUs, OpenMP speedup for optimizing performance on multicore CPUs, a full C++ implementation for efficiency
+            and control over memory management, and a Python wrapper or API for seamless integration with the extensive
+            Python ecosystem. With these features, Arachne provides users with a powerful toolkit for developing and
+            deploying deep learning models efficiently, enabling tasks ranging from rapid prototyping to
+            high-performance computing environments. Arachne also provides a code free environment to auto create and
+            train models on simple datasets(Beta)</p>
+        <h1 id="section2">Getting started</h1>
+        <p>Clone the GitHub repository given below to install from source</p>
+        <code>git clone https://github.com/Aansh2003/Arachne.git</code>
+        <p>Go to the build directory</p>
+        <code>cd Arachne/server/core/build</code>
+        <p>Create the CMake and make the library</p>
+        <code>cmake ..</code>
+        <br>
+        <code>make</code>
+        <p>If you want to add a C++ source file, create the file and re initiate the cmake after adding the following
+            line to CMakeLists.txt, in the core directory.</p>
+        <code>file(GLOB_RECURSE TEST_SOURCES "src/your_file_name.cpp")</code>
+        <h1 id="section3">Codeless Setup</h1>
+        <p>Configuring the server</p>
+        <code>cd Arachne/server</code>
+        <br>
+        <code>pip3 install -r requirements.txt</code>
+        <p>Configuring the client</p>
+        <code></code>
+
+        <h1 id="section4">Tensor</h1>
+        <p>Constructor definitions - C++</p>
+        <code>Tensor(T**,std::pair &ltint,int&gt);</code>
+        <p>T** - 2D array, dynamically allocated</p>
+        <p>std::pair &ltint,int&gt - size of the 2d array</p>
+    </div>
+</body>
+
+</html>

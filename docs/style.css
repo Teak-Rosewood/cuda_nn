@@ -1,0 +1,86 @@
+body {
+    margin: 0;
+    font-family: 'Times New Roman', Times, serif;
+    display: flex;
+}
+
+.sidebar {
+    position: fixed;
+    left: 0;
+    top: 0;
+    height: 100%;
+    width: 15%;
+    background-color: #f4f4f4;
+    padding: 1%;
+    box-sizing: border-box;
+}
+
+.sidebar h2 {
+    margin-top: 0;
+}
+
+.sidebar ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.sidebar ul li {
+    margin-bottom: 10px;
+}
+
+.sidebar ul li a {
+    text-decoration: none;
+    color: #333;
+}
+
+.content {
+    margin-left: 15%;
+    /* Adjust according to the width of your sidebar */
+    padding: 2%;
+    width: 100%;
+}
+
+.sidebar-header {
+    font-family: "Ojuju";
+    text-align: center;
+    font-size: 200%;
+    font-weight: 500;
+}
+
+.sidebar-main-header {
+    font-size: 150%;
+    font-weight: 400;
+}
+
+.header {
+    font-family: "Ojuju";
+    text-align: center;
+    font-size: 300%;
+    font-weight: 600;
+}
+
+p {
+    font-size: 120%;
+}
+
+code {
+    padding: 1%;
+}
+
+pre {
+    padding: 1%;
+}
+
+pre code {
+    padding: 0%;
+}
+
+@media only screen and (max-width: 900px) {
+    .sidebar {
+        width: 25%;
+    }
+
+    .content {
+        margin-left: 25%;
+    }
+}
