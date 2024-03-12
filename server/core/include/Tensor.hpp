@@ -98,10 +98,12 @@ private:
 
 template<typename T>
 Tensor<T>::~Tensor() {
-    for (int i = 0; i < this->size.first; ++i) {
-        delete[] data[i];
+    if (data != nullptr) {
+        for (int i = 0; i < this->size.first; ++i) {
+            if (data[i] != nullptr) delete[] data[i];
+        }
+        delete[] data;
     }
-    delete[] data;
 }
 
 template<typename T>

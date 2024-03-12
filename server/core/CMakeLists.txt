@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.18)
-project(cuda_nn)
+project(arachne)
 
 find_package(CUDA REQUIRED)
 find_package(OpenMP REQUIRED)
@@ -25,15 +25,15 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)
 
 cuda_compile(cuda_objs ${CUDA_SOURCES})
 
-add_library(cuda_nn SHARED ${cuda_objs} ${SOURCES})
-target_link_libraries(cuda_nn ${CUDA_LIBRARIES})
+add_library(arachne SHARED ${cuda_objs} ${SOURCES})
+target_link_libraries(arachne ${CUDA_LIBRARIES})
 
 if(OpenMP_CXX_FOUND)
-    target_compile_options(cuda_nn PRIVATE -fopenmp)
-    target_link_libraries(cuda_nn OpenMP::OpenMP_CXX)
+    target_compile_options(arachne PRIVATE -fopenmp)
+    target_link_libraries(arachne OpenMP::OpenMP_CXX)
 endif()
 
-set_target_properties(cuda_nn PROPERTIES LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
+set_target_properties(arachne PROPERTIES LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 
 # Specify source and header files for the executables
 # file(GLOB_RECURSE MAIN_SOURCES "src/model.cu" "src/main.cpp")
@@ -46,10 +46,10 @@ set_target_properties(test PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DI
 
 set(CMAKE_SWIG_FLAGS "")
 set(CMAKE_SWIG_OUTDIR ${CMAKE_CURRENT_SOURCE_DIR})
-set_property(SOURCE interfaces/cuda_nn.i PROPERTY CPLUSPLUS ON)
-set_property(SOURCE interfaces/cuda_nn.i PROPERTY SWIG_OUTFILE_DIR ${CMAKE_SOURCE_DIR})
-swig_add_library(cudann LANGUAGE python SOURCES interfaces/cuda_nn.i ${HEADERS})
-swig_link_libraries(cudann ${PYTHON_LIBRARIES})
-set_target_properties(cudann PROPERTIES
+set_property(SOURCE interfaces/arachne.i PROPERTY CPLUSPLUS ON)
+set_property(SOURCE interfaces/arachne.i PROPERTY SWIG_OUTFILE_DIR ${CMAKE_SOURCE_DIR})
+swig_add_library(arachne_nn LANGUAGE python SOURCES interfaces/arachne.i ${HEADERS})
+swig_link_libraries(arachne_nn ${PYTHON_LIBRARIES})
+set_target_properties(arachne_nn PROPERTIES
     LIBRARY_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}
 )

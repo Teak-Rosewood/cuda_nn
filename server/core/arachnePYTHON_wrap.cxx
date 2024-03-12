@@ -2741,16 +2741,16 @@ static swig_module_info swig_module = {swig_types, 36, 0, 0, 0, 0};
 #define SWIG_TypeQuery SWIG_Python_TypeQuery
 
 /*-----------------------------------------------
-              @(target):= _cudann.so
+              @(target):= _arachne_nn.so
   ------------------------------------------------*/
 #if PY_VERSION_HEX >= 0x03000000
-#  define SWIG_init    PyInit__cudann
+#  define SWIG_init    PyInit__arachne_nn
 
 #else
-#  define SWIG_init    init_cudann
+#  define SWIG_init    init_arachne_nn
 
 #endif
-#define SWIG_name    "_cudann"
+#define SWIG_name    "_arachne_nn"
 
 #define SWIGVERSION 0x040002 
 #define SWIG_VERSION SWIGVERSION

@@ -42,6 +42,7 @@ Pipeline::~Pipeline()
     {
         delete model;
     }
+    network.clear();
 }
 
 int Pipeline::getTrainableLayers()

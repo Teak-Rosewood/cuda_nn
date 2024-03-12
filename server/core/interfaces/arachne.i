@@ -1,4 +1,4 @@
-%module cuda_nn
+%module arachne
 
 %{
 #include "Tensor.hpp"

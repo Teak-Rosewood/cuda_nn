@@ -24,16 +24,17 @@ public:
     bool trainable;
     std::string type;
     bool isforward = false;
-    Tensor<float>* weights;
-    Tensor<float>* gradients;
-    Tensor<float>* inputs;
+    Tensor<float>* weights = nullptr;
+    Tensor<float>* gradients = nullptr;
+    Tensor<float>* inputs = nullptr;
 };
 
-Model::~Model()
-{
-    delete weights;
-    delete gradients;
-    delete inputs;
+Model::~Model() {
+    if (trainable) {
+        if (weights != nullptr) delete weights;
+        if (gradients != nullptr) delete gradients;
+        if (inputs != nullptr) delete inputs;
+    }
 }
 
 void Model::backward(Tensor<float> last_gradient,Tensor<float>& gradient,bool local)
