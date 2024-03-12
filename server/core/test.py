@@ -34,6 +34,7 @@ myPipeline.add(e)
 myPipeline.add(f)
 myPipeline.add(g)
 
+myPipeline.load("help.arachne")
 # Print the pipeline
 myPipeline.printPipeline()
 
@@ -49,5 +50,6 @@ for j in range(10):
 
         loss = a.loss(prediction, output_list[i])
 
-        myPipeline.backward(optimizer, a, output_list[i])
+        # myPipeline.backward(optimizer, a, output_list[i])
     print(f"Epoch {j+1}, Loss: {loss}")
+# myPipeline.save("help")

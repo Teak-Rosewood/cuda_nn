@@ -541,6 +541,12 @@ class Model(object):
         return _arachne_nn.Model_getGradients(self)
     __swig_destroy__ = _arachne_nn.delete_Model
 
+    def getWeights(self):
+        return _arachne_nn.Model_getWeights(self)
+
+    def setWeights(self, arg2):
+        return _arachne_nn.Model_setWeights(self, arg2)
+
     def copy(self):
         return _arachne_nn.Model_copy(self)
 
@@ -701,6 +707,12 @@ class Pipeline(object):
 
     def OMPbackward(self, arg2, arg3, arg4):
         return _arachne_nn.Pipeline_OMPbackward(self, arg2, arg3, arg4)
+
+    def save(self, filename):
+        return _arachne_nn.Pipeline_save(self, filename)
+
+    def load(self, filename):
+        return _arachne_nn.Pipeline_load(self, filename)
     __swig_destroy__ = _arachne_nn.delete_Pipeline
 
     def forwardFloat(self, input):

@@ -19,6 +19,9 @@ public:
     Tensor<float> getGradients();
     ~Model();
 
+    Tensor<float>* getWeights();
+    void setWeights(Tensor<float>);
+
     virtual Model* copy() = 0;
 
     virtual int getParamCount() = 0;
@@ -83,6 +86,17 @@ void Model::OMPcomputeGradients(Tensor<float> gradient,bool local)
 Tensor<float> Model::getGradients()
 {
     return *gradients;
+}
+
+Tensor<float>* Model::getWeights()
+{
+    return weights;
+}
+
+void Model::setWeights(Tensor<float> new_weights)
+{
+    if(weights!=nullptr) delete weights;
+    weights = new Tensor<float>(new_weights);
 }
 
 #endif

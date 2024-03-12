@@ -11981,6 +11981,66 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_Model_getWeights(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Model *arg1 = (Model *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject *swig_obj[1] ;
+  Tensor< float > *result = 0 ;
+  
+  if (!args) SWIG_fail;
+  swig_obj[0] = args;
+  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_Model, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Model_getWeights" "', argument " "1"" of type '" "Model *""'"); 
+  }
+  arg1 = reinterpret_cast< Model * >(argp1);
+  result = (Tensor< float > *)(arg1)->getWeights();
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_TensorT_float_t, 0 |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_Model_setWeights(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Model *arg1 = (Model *) 0 ;
+  Tensor< float > arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 ;
+  int res2 = 0 ;
+  PyObject *swig_obj[2] ;
+  
+  if (!SWIG_Python_UnpackTuple(args, "Model_setWeights", 2, 2, swig_obj)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_Model, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Model_setWeights" "', argument " "1"" of type '" "Model *""'"); 
+  }
+  arg1 = reinterpret_cast< Model * >(argp1);
+  {
+    res2 = SWIG_ConvertPtr(swig_obj[1], &argp2, SWIGTYPE_p_TensorT_float_t,  0  | 0);
+    if (!SWIG_IsOK(res2)) {
+      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Model_setWeights" "', argument " "2"" of type '" "Tensor< float >""'"); 
+    }  
+    if (!argp2) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Model_setWeights" "', argument " "2"" of type '" "Tensor< float >""'");
+    } else {
+      Tensor< float > * temp = reinterpret_cast< Tensor< float > * >(argp2);
+      arg2 = *temp;
+      if (SWIG_IsNewObj(res2)) delete temp;
+    }
+  }
+  (arg1)->setWeights(arg2);
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *_wrap_Model_copy(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   Model *arg1 = (Model *) 0 ;
@@ -13747,6 +13807,68 @@ SWIGINTERN PyObject *_wrap_Pipeline_OMPbackward(PyObject *SWIGUNUSEDPARM(self), 
     }
   }
   (arg1)->OMPbackward(arg2,arg3,arg4);
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_Pipeline_save(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Pipeline *arg1 = (Pipeline *) 0 ;
+  std::string arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject *swig_obj[2] ;
+  
+  if (!SWIG_Python_UnpackTuple(args, "Pipeline_save", 2, 2, swig_obj)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_Pipeline, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Pipeline_save" "', argument " "1"" of type '" "Pipeline *""'"); 
+  }
+  arg1 = reinterpret_cast< Pipeline * >(argp1);
+  {
+    std::string *ptr = (std::string *)0;
+    int res = SWIG_AsPtr_std_string(swig_obj[1], &ptr);
+    if (!SWIG_IsOK(res) || !ptr) {
+      SWIG_exception_fail(SWIG_ArgError((ptr ? res : SWIG_TypeError)), "in method '" "Pipeline_save" "', argument " "2"" of type '" "std::string""'"); 
+    }
+    arg2 = *ptr;
+    if (SWIG_IsNewObj(res)) delete ptr;
+  }
+  (arg1)->save(arg2);
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_Pipeline_load(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Pipeline *arg1 = (Pipeline *) 0 ;
+  std::string arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject *swig_obj[2] ;
+  
+  if (!SWIG_Python_UnpackTuple(args, "Pipeline_load", 2, 2, swig_obj)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_Pipeline, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Pipeline_load" "', argument " "1"" of type '" "Pipeline *""'"); 
+  }
+  arg1 = reinterpret_cast< Pipeline * >(argp1);
+  {
+    std::string *ptr = (std::string *)0;
+    int res = SWIG_AsPtr_std_string(swig_obj[1], &ptr);
+    if (!SWIG_IsOK(res) || !ptr) {
+      SWIG_exception_fail(SWIG_ArgError((ptr ? res : SWIG_TypeError)), "in method '" "Pipeline_load" "', argument " "2"" of type '" "std::string""'"); 
+    }
+    arg2 = *ptr;
+    if (SWIG_IsNewObj(res)) delete ptr;
+  }
+  (arg1)->load(arg2);
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
@@ -15845,6 +15967,8 @@ static PyMethodDef SwigMethods[] = {
 	 { "Model_OMPcomputeGradients", _wrap_Model_OMPcomputeGradients, METH_VARARGS, NULL},
 	 { "Model_getGradients", _wrap_Model_getGradients, METH_O, NULL},
 	 { "delete_Model", _wrap_delete_Model, METH_O, NULL},
+	 { "Model_getWeights", _wrap_Model_getWeights, METH_O, NULL},
+	 { "Model_setWeights", _wrap_Model_setWeights, METH_VARARGS, NULL},
 	 { "Model_copy", _wrap_Model_copy, METH_O, NULL},
 	 { "Model_getParamCount", _wrap_Model_getParamCount, METH_O, NULL},
 	 { "Model_getInputSize", _wrap_Model_getInputSize, METH_O, NULL},
@@ -15905,6 +16029,8 @@ static PyMethodDef SwigMethods[] = {
 	 { "Pipeline_printPipeline", _wrap_Pipeline_printPipeline, METH_O, NULL},
 	 { "Pipeline_backward", _wrap_Pipeline_backward, METH_VARARGS, NULL},
 	 { "Pipeline_OMPbackward", _wrap_Pipeline_OMPbackward, METH_VARARGS, NULL},
+	 { "Pipeline_save", _wrap_Pipeline_save, METH_VARARGS, NULL},
+	 { "Pipeline_load", _wrap_Pipeline_load, METH_VARARGS, NULL},
 	 { "delete_Pipeline", _wrap_delete_Pipeline, METH_O, NULL},
 	 { "Pipeline_forwardFloat", _wrap_Pipeline_forwardFloat, METH_VARARGS, NULL},
 	 { "Pipeline_swigregister", Pipeline_swigregister, METH_O, NULL},

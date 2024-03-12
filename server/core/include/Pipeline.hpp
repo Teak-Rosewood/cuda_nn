@@ -24,6 +24,9 @@ public:
 
     void backward(Optimizer*,Loss*,Tensor<float>);
     void OMPbackward(Optimizer*,Loss*,Tensor<float>);
+
+    void save(std::string filename);
+    void load(std::string filename);
 private:
     std::vector<Model*> network;
     vector<Tensor<float>> graph;
@@ -184,4 +187,105 @@ void Pipeline::OMPbackward(Optimizer* optimizer, Loss* loss, Tensor<float> actua
     }
 }
 
+void Pipeline::save(std::string filename)
+{
+    std::ofstream outfile(filename+".arachne");
+    if (!outfile) {
+        return;
+    }
+
+    for (Model* model: network) {
+        if(model->trainable)
+        {
+            Tensor<float> tensor = *model->getWeights();
+            outfile << "Tensor size: " << tensor.size.first << "x" << tensor.size.second << std::endl;
+            for (int i = 0; i < tensor.size.first; ++i) {
+                for (int j = 0; j < tensor.size.second; ++j) {
+                    outfile << tensor.data[i][j] << " ";
+                }
+                outfile << std::endl;
+            }
+        }
+    }
+
+    outfile.close();
+}
+
+void Pipeline::load(std::string filename) 
+{
+    std::vector<Tensor<float>> tensors;
+
+    std::ifstream infile(filename);
+    if (!infile) {
+        // Error handling: unable to open file
+        throw std::runtime_error("Error opening file");
+    }
+
+    std::string line;
+    // Tensor<float> tensor;
+    while (std::getline(infile, line)) {
+        if (line.substr(0, 11) == "Tensor size") {
+            int width, height;
+            sscanf(line.c_str(), "Tensor size: %dx%d", &width, &height);
+            std::pair<int,int> size = std::make_pair(width, height);
+
+            // Allocate memory for data
+            float** data = new float*[width];
+            for (int i = 0; i < width; ++i) {
+                data[i] = new float[height];
+            }
+
+            // Read data from file
+            for (int i = 0; i < width; ++i) {
+                std::getline(infile, line);
+                std::istringstream iss(line);
+                for (int j = 0; j < height; ++j) {
+                    iss >> data[i][j];
+                }
+            }
+
+            tensors.push_back(Tensor<float>(data,size));
+
+            for (int i = 0; i < width; ++i) {
+                delete[] data[i];
+            }
+            delete[] data;
+        }
+    }
+
+    infile.close();
+
+    int j = 0;
+
+    int count = 0;
+    for(Model* model: network)
+    {
+        if(model->trainable)
+            count++;
+    }
+
+    if(count != tensors.size())
+        throw std::runtime_error("Mismatch");
+
+    for(int i=0;i<tensors.size();i++)
+    {
+        for(;j<network.size();j++)
+        {
+            if(network[j]->trainable)
+                break;
+        }
+        if(j>=network.size()) break;
+
+        if(network[j]->getWeights()->getSize() == tensors[i].getSize())
+        {
+            network[j]->setWeights(tensors[i]);
+            network[j]->getWeights()->printTensor();
+        }
+        else
+        {
+            throw std::runtime_error("Mismatch");
+        }
+        j++;
+    }
+}
 #endif

@@ -43,23 +43,24 @@ int main()
 
 
     myPipeline.printPipeline();
+    myPipeline.load("hello.arachne");
     Adam  optimizer(1e-5);
 
     auto start = std::chrono::high_resolution_clock::now();
 
-    for(int j=0;j<1;j++)
-    {
-        float loss = 0;
-        for(int i=0;i<input_list.size();i++)
-        {
-            input = input_list[i];
-            output = output_list[i];
-            Tensor<float> pred = myPipeline.forward(input);
-            loss += loss_fn.loss(pred,output);
-            myPipeline.backward(&optimizer,&loss_fn,output);
-        }
-        cout<<"Loss at epoch "<<j<<": "<<loss<<endl;
-    }
+    // for(int j=0;j<40;j++)
+    // {
+    //     float loss = 0;
+    //     for(int i=0;i<input_list.size();i++)
+    //     {
+    //         input = input_list[i];
+    //         output = output_list[i];
+    //         Tensor<float> pred = myPipeline.forward(input);
+    //         loss += loss_fn.loss(pred,output);
+    //         myPipeline.backward(&optimizer,&loss_fn,output);
+    //     }
+    //     cout<<"Loss at epoch "<<j<<": "<<loss<<endl;
+    // }
 
     auto end = std::chrono::high_resolution_clock::now();
     std::chrono::duration<double> duration = end - start;
@@ -82,4 +83,6 @@ int main()
 
     cout<<"Accuracy: "<<float(correct)*100/input_list.size()<<"%"<<endl;
     cout<<"Close prediction: "<<float(close)*100/input_list.size()<<"%"<<endl;
+
+    // myPipeline.save("hello");
 }
