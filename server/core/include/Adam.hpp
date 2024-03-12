@@ -8,6 +8,7 @@
 class Adam : public Optimizer {
 public:
     Adam(float lr = 0.001, float beta1 = 0.9, float beta2 = 0.999, float epsilon = 1e-7);
+    ~Adam();
     void update_weights(Tensor<float>&, Tensor<float>,int) override;
 
 private:
@@ -21,6 +22,19 @@ private:
 };
 
 Adam::Adam(float lr, float beta1, float beta2, float epsilon) : learning_rate(lr), beta1(beta1), beta2(beta2), epsilon(epsilon) {}
+
+Adam::~Adam()
+{
+    for(auto i:m_v)
+    {
+        delete i;
+    }
+
+    for(auto i:v_v)
+    {
+        delete i;
+    }
+}
 
 void Adam::update_weights(Tensor<float>& weights, Tensor<float> gradient, int count) {
     if(t.size() < count+1)

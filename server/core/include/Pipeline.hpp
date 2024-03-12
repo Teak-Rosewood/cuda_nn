@@ -159,8 +159,7 @@ void Pipeline::backward(Optimizer* optimizer, Loss* loss, Tensor<float> actual)
         {
             optimizer->update_weights(*network[i]->weights,*network[i]->gradients,count);
             count++;
-        }
-            
+        }   
     }
 }
 

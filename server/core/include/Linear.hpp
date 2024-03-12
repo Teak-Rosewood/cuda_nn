@@ -9,6 +9,7 @@
 class Linear : public Model {
 public:
     Linear(std::pair<int,int> inputSize, int outputSize);
+    ~Linear();
     int getParamCount() override;
     std::pair<int,int> getInputSize() override;
     std::pair<int,int> getOutputSize() override;
@@ -44,6 +45,18 @@ Linear::Linear(std::pair<int,int> inputSize, int outputSize) : Model("Linear",tr
     }
 
     weights = new Tensor<float>(data,weight_size);
+
+    for(int i=0;i<weight_size.first;i++)
+    {
+        delete[] data[i];
+    }
+
+    delete[] data;
+}
+
+Linear::~Linear()
+{
+
 }
 
 int Linear::getParamCount()
@@ -55,6 +68,7 @@ Tensor<float> Linear::forward(Tensor<float> input)
 {
     // *inputs = input.copy();
     Tensor<float> next_val = input*(*weights);
+    if (inputs != nullptr) delete inputs;
     inputs = new Tensor <float> (input);
     inputs->transpose();
     isforward = true;

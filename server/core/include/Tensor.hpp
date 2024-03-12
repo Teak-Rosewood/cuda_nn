@@ -187,9 +187,9 @@ void Tensor<T>::OMPtranspose()
     T** to_delete = this->data;
     for(int i=0;i<this->size.second;i++)
     {
-        delete to_delete[i];
+        delete[] to_delete[i];
     }
-    delete to_delete;
+    delete[] to_delete;
 
     this->data = temp_data;
 }
@@ -215,9 +215,9 @@ void Tensor<T>::transpose()
     T** to_delete = this->data;
     for(int i=0;i<this->size.second;i++)
     {
-        delete to_delete[i];
+        delete[] to_delete[i];
     }
-    delete to_delete;
+    delete[] to_delete;
 
     this->data = temp_data;
 }
@@ -260,9 +260,9 @@ Tensor<T> Tensor<T>::multiply(Tensor<T> b)
 
     for(int i=0;i<this->size.first;i++)
     {
-        delete multiplied[i];
+        delete[] multiplied[i];
     }
-    delete multiplied;
+    delete[] multiplied;
     
     return output;
 }
@@ -301,9 +301,9 @@ Tensor<T> Tensor<T>::OMPmultiply(Tensor<T> b)
 
     for(int i=0;i<this->size.first;i++)
     {
-        delete multiplied[i];
+        delete[] multiplied[i];
     }
-    delete multiplied;
+    delete[] multiplied;
     
     return output;
 }
@@ -330,9 +330,9 @@ Tensor<T> Tensor<T>::scalarMultiply(float multiplicand)
 
     for(int i=0;i<this->size.first;i++)
     {
-        delete multiplied[i];
+        delete[] multiplied[i];
     }
-    delete multiplied;
+    delete[] multiplied;
     
     return output;
 }
@@ -359,9 +359,9 @@ Tensor<T> Tensor<T>::scalarAdd(T to_add)
 
     for(int i=0;i<this->size.first;i++)
     {
-        delete multiplied[i];
+        delete[] multiplied[i];
     }
-    delete multiplied;
+    delete[] multiplied;
     
     return output;
 }
@@ -389,9 +389,9 @@ Tensor<T> Tensor<T>::OMPscalarMultiply(float multiplicand)
 
     for(int i=0;i<this->size.first;i++)
     {
-        delete multiplied[i];
+        delete[] multiplied[i];
     }
-    delete multiplied;
+    delete[] multiplied;
     
     return output;
 }
@@ -421,9 +421,9 @@ Tensor<T> Tensor<T>::divide(Tensor<T> adder)
 
     for(int i=0;i<this->size.first;i++)
     {
-        delete added[i];
+        delete[] added[i];
     }
-    delete added;
+    delete[] added;
     
     return output;
 }
@@ -453,9 +453,9 @@ Tensor<T> Tensor<T>::add(Tensor<T> adder)
 
     for(int i=0;i<this->size.first;i++)
     {
-        delete added[i];
+        delete[] added[i];
     }
-    delete added;
+    delete[] added;
     
     return output;
 }
@@ -485,9 +485,9 @@ Tensor<T> Tensor<T>::elem_multiply(Tensor<T> adder)
 
     for(int i=0;i<this->size.first;i++)
     {
-        delete added[i];
+        delete[] added[i];
     }
-    delete added;
+    delete[] added;
     
     return output;
 }
@@ -517,9 +517,9 @@ Tensor<T> Tensor<T>::OMPadd(Tensor<T> adder)
 
     for(int i=0;i<this->size.first;i++)
     {
-        delete added[i];
+        delete[] added[i];
     }
-    delete added;
+    delete[] added;
 
     return output;
 }
@@ -580,9 +580,9 @@ Tensor<float> Tensor<T>::convertFloat()
 
     for(int i=0;i<this->size.first;i++)
     {
-        delete floatTensor[i];
+        delete[] floatTensor[i];
     }
-    delete floatTensor;
+    delete[] floatTensor;
 
     return output;
 }
@@ -608,9 +608,9 @@ Tensor<float> Tensor<T>::sqrt()
 
     for(int i=0;i<this->size.first;i++)
     {
-        delete floatTensor[i];
+        delete[] floatTensor[i];
     }
-    delete floatTensor;
+    delete[] floatTensor;
 
     return output;
 }
@@ -700,9 +700,9 @@ Tensor<int> Tensor<T>::randomTensor(std::pair<int,int> size)
 
     for(int i=0;i<size.first;i++)
     {
-        delete data[i];
+        delete[] data[i];
     }
-    delete data;
+    delete[] data;
     return output;
 } 
 
@@ -724,9 +724,9 @@ Tensor<int> Tensor<T>::randomTensor(std::pair<int,int> size,int min,int max)
 
     for(int i=0;i<size.first;i++)
     {
-        delete data[i];
+        delete[] data[i];
     }
-    delete data;
+    delete[] data;
     return output;
 } 
 
@@ -748,9 +748,9 @@ Tensor<float> Tensor<T>::randomFloatTensor(std::pair<int,int> size)
 
     for(int i=0;i<size.first;i++)
     {
-        delete data[i];
+        delete[] data[i];
     }
-    delete data;
+    delete[] data;
     return output;
 } 
 

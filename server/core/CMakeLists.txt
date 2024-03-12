@@ -10,6 +10,8 @@ include_directories(${PYTHON_INCLUDE_PATH})
 include(${SWIG_USE_FILE})
 
 set(CMAKE_CXX_STANDARD 11)
+# set(CMAKE_BUILD_TYPE Debug)
+# set(CMAKE_CXX_FLAGS_DEBUG "-g")
 
 # Specify source and header files for the shared library
 file(GLOB_RECURSE CUDA_SOURCES "src/.cu")

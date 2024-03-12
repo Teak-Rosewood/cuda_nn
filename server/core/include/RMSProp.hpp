@@ -7,7 +7,7 @@ class RMSProp : public Optimizer {
 public:
     RMSProp(float lr = 0.001, float decay_rate = 0.9, float epsilon = 1e-7);
     void update_weights(Tensor<float>& weights, Tensor<float> gradient, int count) override;
-
+    ~RMSProp();
 private:
     float learning_rate;
     float decay_rate;
@@ -16,6 +16,14 @@ private:
 };
 
 RMSProp::RMSProp(float lr, float decay_rate, float epsilon) : learning_rate(lr), decay_rate(decay_rate), epsilon(epsilon) {}
+
+RMSProp::~RMSProp()
+{
+    for(auto i:accumulated_gradient_squared)
+    {
+        delete i;
+    }
+}
 
 void RMSProp::update_weights(Tensor<float>& weights, Tensor<float> gradient, int count) {
     if (accumulated_gradient_squared.size() < count + 1) {

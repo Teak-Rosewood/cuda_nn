@@ -631,10 +631,10 @@ class Adam(Optimizer):
 
     def __init__(self, lr=0.001, beta1=0.9, beta2=0.999, epsilon=1e-7):
         _arachne_nn.Adam_swiginit(self, _arachne_nn.new_Adam(lr, beta1, beta2, epsilon))
+    __swig_destroy__ = _arachne_nn.delete_Adam
 
     def update_weights(self, arg2, arg3, arg4):
         return _arachne_nn.Adam_update_weights(self, arg2, arg3, arg4)
-    __swig_destroy__ = _arachne_nn.delete_Adam
 
 # Register Adam in _arachne_nn:
 _arachne_nn.Adam_swigregister(Adam)
@@ -763,6 +763,7 @@ class Linear(Model):
 
     def __init__(self, inputSize, outputSize):
         _arachne_nn.Linear_swiginit(self, _arachne_nn.new_Linear(inputSize, outputSize))
+    __swig_destroy__ = _arachne_nn.delete_Linear
 
     def getParamCount(self):
         return _arachne_nn.Linear_getParamCount(self)
@@ -781,7 +782,6 @@ class Linear(Model):
 
     def printWeights(self):
         return _arachne_nn.Linear_printWeights(self)
-    __swig_destroy__ = _arachne_nn.delete_Linear
 
 # Register Linear in _arachne_nn:
 _arachne_nn.Linear_swigregister(Linear)

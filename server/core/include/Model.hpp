@@ -58,11 +58,13 @@ void Model::computeGradients(Tensor<float> last_gradient,Tensor<float>& gradient
     if(local)
     {
         gradient.transpose();
+        if (gradients != nullptr) delete gradients;
         gradients = new Tensor <float> (grad * gradient);
         gradient = grad;
     }
     else
     {
+        if (gradients != nullptr) delete gradients;
         gradients = new Tensor <float> (grad);
         gradient = grad;
     }

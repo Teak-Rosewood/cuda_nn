@@ -13110,6 +13110,28 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_delete_Adam(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Adam *arg1 = (Adam *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject *swig_obj[1] ;
+  
+  if (!args) SWIG_fail;
+  swig_obj[0] = args;
+  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_Adam, SWIG_POINTER_DISOWN |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "delete_Adam" "', argument " "1"" of type '" "Adam *""'"); 
+  }
+  arg1 = reinterpret_cast< Adam * >(argp1);
+  delete arg1;
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *_wrap_Adam_update_weights(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   Adam *arg1 = (Adam *) 0 ;
@@ -13159,28 +13181,6 @@ SWIGINTERN PyObject *_wrap_Adam_update_weights(PyObject *SWIGUNUSEDPARM(self), P
   } 
   arg4 = static_cast< int >(val4);
   (arg1)->update_weights(*arg2,arg3,arg4);
-  resultobj = SWIG_Py_Void();
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_delete_Adam(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  Adam *arg1 = (Adam *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  PyObject *swig_obj[1] ;
-  
-  if (!args) SWIG_fail;
-  swig_obj[0] = args;
-  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_Adam, SWIG_POINTER_DISOWN |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "delete_Adam" "', argument " "1"" of type '" "Adam *""'"); 
-  }
-  arg1 = reinterpret_cast< Adam * >(argp1);
-  delete arg1;
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
@@ -14488,6 +14488,28 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_delete_Linear(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Linear *arg1 = (Linear *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject *swig_obj[1] ;
+  
+  if (!args) SWIG_fail;
+  swig_obj[0] = args;
+  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_Linear, SWIG_POINTER_DISOWN |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "delete_Linear" "', argument " "1"" of type '" "Linear *""'"); 
+  }
+  arg1 = reinterpret_cast< Linear * >(argp1);
+  delete arg1;
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *_wrap_Linear_getParamCount(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   Linear *arg1 = (Linear *) 0 ;
@@ -14648,28 +14670,6 @@ SWIGINTERN PyObject *_wrap_Linear_printWeights(PyObject *SWIGUNUSEDPARM(self), P
   }
   arg1 = reinterpret_cast< Linear * >(argp1);
   (arg1)->printWeights();
-  resultobj = SWIG_Py_Void();
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_delete_Linear(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  Linear *arg1 = (Linear *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  PyObject *swig_obj[1] ;
-  
-  if (!args) SWIG_fail;
-  swig_obj[0] = args;
-  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_Linear, SWIG_POINTER_DISOWN |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "delete_Linear" "', argument " "1"" of type '" "Linear *""'"); 
-  }
-  arg1 = reinterpret_cast< Linear * >(argp1);
-  delete arg1;
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
@@ -15696,8 +15696,8 @@ static PyMethodDef SwigMethods[] = {
 	 { "delete_Optimizer", _wrap_delete_Optimizer, METH_O, NULL},
 	 { "Optimizer_swigregister", Optimizer_swigregister, METH_O, NULL},
 	 { "new_Adam", _wrap_new_Adam, METH_VARARGS, NULL},
-	 { "Adam_update_weights", _wrap_Adam_update_weights, METH_VARARGS, NULL},
 	 { "delete_Adam", _wrap_delete_Adam, METH_O, NULL},
+	 { "Adam_update_weights", _wrap_Adam_update_weights, METH_VARARGS, NULL},
 	 { "Adam_swigregister", Adam_swigregister, METH_O, NULL},
 	 { "Adam_swiginit", Adam_swiginit, METH_VARARGS, NULL},
 	 { "Loss_loss", _wrap_Loss_loss, METH_VARARGS, NULL},
@@ -15742,13 +15742,13 @@ static PyMethodDef SwigMethods[] = {
 	 { "RMSProp_swigregister", RMSProp_swigregister, METH_O, NULL},
 	 { "RMSProp_swiginit", RMSProp_swiginit, METH_VARARGS, NULL},
 	 { "new_Linear", _wrap_new_Linear, METH_VARARGS, NULL},
+	 { "delete_Linear", _wrap_delete_Linear, METH_O, NULL},
 	 { "Linear_getParamCount", _wrap_Linear_getParamCount, METH_O, NULL},
 	 { "Linear_getInputSize", _wrap_Linear_getInputSize, METH_O, NULL},
 	 { "Linear_getOutputSize", _wrap_Linear_getOutputSize, METH_O, NULL},
 	 { "Linear_forward", _wrap_Linear_forward, METH_VARARGS, NULL},
 	 { "Linear_OMPforward", _wrap_Linear_OMPforward, METH_VARARGS, NULL},
 	 { "Linear_printWeights", _wrap_Linear_printWeights, METH_O, NULL},
-	 { "delete_Linear", _wrap_delete_Linear, METH_O, NULL},
 	 { "Linear_swigregister", Linear_swigregister, METH_O, NULL},
 	 { "Linear_swiginit", Linear_swiginit, METH_VARARGS, NULL},
 	 { "new_SGD", _wrap_new_SGD, METH_VARARGS, NULL},

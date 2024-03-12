@@ -1,0 +1,32 @@
+List of functions checked for memory leaks
+
+Tensor.hpp
+
+destructor - no leaks
+randomFloatTensor - no leaks
+randomTensor - no leaks
+Normalize - no leaks
+multiply - no leaks
+transpose - no leaks
+elem_multiply - no leaks
+scalarMultiply - no leaks
+add - no leaks
+divide - no leaks
+convertFloat - no leaks
+flatten - no leaks
+reshape - no leaks
+sqrt - no leaks
+row_split - no leaks
+input_output_split - no leaks
+max - no leaks
+min - no leaks
+argmax - no leaks
+argmin - no leaks
+readCSV - no leaks
+map - unchecked
+copy - no leaks
+
+= - no leaks
+* - no leaks
++ - no leaks
+- - no leaks
