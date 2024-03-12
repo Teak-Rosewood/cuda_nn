@@ -10978,7 +10978,7 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_FloatTensor__print(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_FloatTensor_printTensor(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   Tensor< float > *arg1 = (Tensor< float > *) 0 ;
   void *argp1 = 0 ;
@@ -10989,10 +10989,10 @@ SWIGINTERN PyObject *_wrap_FloatTensor__print(PyObject *SWIGUNUSEDPARM(self), Py
   swig_obj[0] = args;
   res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_TensorT_float_t, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "FloatTensor__print" "', argument " "1"" of type '" "Tensor< float > *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "FloatTensor_printTensor" "', argument " "1"" of type '" "Tensor< float > *""'"); 
   }
   arg1 = reinterpret_cast< Tensor< float > * >(argp1);
-  (arg1)->print();
+  (arg1)->printTensor();
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
@@ -13503,6 +13503,28 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_delete_Pipeline(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Pipeline *arg1 = (Pipeline *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject *swig_obj[1] ;
+  
+  if (!args) SWIG_fail;
+  swig_obj[0] = args;
+  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_Pipeline, SWIG_POINTER_DISOWN |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "delete_Pipeline" "', argument " "1"" of type '" "Pipeline *""'"); 
+  }
+  arg1 = reinterpret_cast< Pipeline * >(argp1);
+  delete arg1;
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *_wrap_Pipeline_add(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   Pipeline *arg1 = (Pipeline *) 0 ;
@@ -13692,28 +13714,6 @@ SWIGINTERN PyObject *_wrap_Pipeline_forwardFloat(PyObject *SWIGUNUSEDPARM(self),
   }
   result = (arg1)->SWIGTEMPLATEDISAMBIGUATOR forward< float >(arg2);
   resultobj = SWIG_NewPointerObj((new Tensor< float >(static_cast< const Tensor< float >& >(result))), SWIGTYPE_p_TensorT_float_t, SWIG_POINTER_OWN |  0 );
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_delete_Pipeline(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  Pipeline *arg1 = (Pipeline *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  PyObject *swig_obj[1] ;
-  
-  if (!args) SWIG_fail;
-  swig_obj[0] = args;
-  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_Pipeline, SWIG_POINTER_DISOWN |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "delete_Pipeline" "', argument " "1"" of type '" "Pipeline *""'"); 
-  }
-  arg1 = reinterpret_cast< Pipeline * >(argp1);
-  delete arg1;
-  resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
   return NULL;
@@ -15627,7 +15627,7 @@ static PyMethodDef SwigMethods[] = {
 	 { "FloatTensor___mul__", _wrap_FloatTensor___mul__, METH_VARARGS, NULL},
 	 { "FloatTensor_getSize", _wrap_FloatTensor_getSize, METH_O, NULL},
 	 { "FloatTensor_printSize", _wrap_FloatTensor_printSize, METH_O, NULL},
-	 { "FloatTensor__print", _wrap_FloatTensor__print, METH_O, NULL},
+	 { "FloatTensor_printTensor", _wrap_FloatTensor_printTensor, METH_O, NULL},
 	 { "FloatTensor_data_set", _wrap_FloatTensor_data_set, METH_VARARGS, NULL},
 	 { "FloatTensor_data_get", _wrap_FloatTensor_data_get, METH_O, NULL},
 	 { "FloatTensor_size_set", _wrap_FloatTensor_size_set, METH_VARARGS, NULL},
@@ -15711,12 +15711,12 @@ static PyMethodDef SwigMethods[] = {
 	 { "CrossEntropyLoss_swigregister", CrossEntropyLoss_swigregister, METH_O, NULL},
 	 { "CrossEntropyLoss_swiginit", CrossEntropyLoss_swiginit, METH_VARARGS, NULL},
 	 { "new_Pipeline", _wrap_new_Pipeline, METH_NOARGS, NULL},
+	 { "delete_Pipeline", _wrap_delete_Pipeline, METH_O, NULL},
 	 { "Pipeline_add", _wrap_Pipeline_add, METH_VARARGS, NULL},
 	 { "Pipeline_printPipeline", _wrap_Pipeline_printPipeline, METH_O, NULL},
 	 { "Pipeline_backward", _wrap_Pipeline_backward, METH_VARARGS, NULL},
 	 { "Pipeline_OMPbackward", _wrap_Pipeline_OMPbackward, METH_VARARGS, NULL},
 	 { "Pipeline_forwardFloat", _wrap_Pipeline_forwardFloat, METH_VARARGS, NULL},
-	 { "delete_Pipeline", _wrap_delete_Pipeline, METH_O, NULL},
 	 { "Pipeline_swigregister", Pipeline_swigregister, METH_O, NULL},
 	 { "Pipeline_swiginit", Pipeline_swiginit, METH_VARARGS, NULL},
 	 { "new_Flatten", _wrap_new_Flatten, METH_O, NULL},

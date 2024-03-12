@@ -13,6 +13,7 @@
 class Pipeline {
 public:
     Pipeline();
+    ~Pipeline();
     void add(Model*);
     void printPipeline();
     template<typename T>
@@ -33,6 +34,14 @@ private:
 Pipeline::Pipeline()
 {
 
+}
+
+Pipeline::~Pipeline()
+{
+    for(auto model: network)
+    {
+        delete model;
+    }
 }
 
 int Pipeline::getTrainableLayers()
