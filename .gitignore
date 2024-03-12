@@ -18,6 +18,7 @@ CTestTestfile.cmake
 *.exe
 *.out
 
+*.arachne
 # Dependency files
 *.d
 
