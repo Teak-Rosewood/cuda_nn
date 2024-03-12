@@ -2,37 +2,61 @@ from flask import Flask, request
 from flask_restful import Api, Resource
 from utils.FileServices import FileServices
 import pandas as pd
-import tensorflow as tf
-
-
+from core.arachne import *
 class CompileModel(Resource):
     def post(self):
-        layer_data = request.get_json()['layers']
-        model = tf.keras.Sequential()
-        df = pd.read_csv("assets/data.csv")
-        attributes = df.columns.tolist()
-        if(layer_data[0]['units'] != len(attributes)-1):
-            return {"message": "Input layer units must match number of features"}, 400
-        if(layer_data[-1]['units'] != 1):
-            return {"message": "Output layer units must be 1"}, 400
-        for layer in layer_data:
-            model.add(tf.keras.layers.Dense(layer['units'], activation=layer['activation'].lower()))
-        model.compile(optimizer='adam', loss='mean_squared_error', metrics=['mse'])
-        model.build((None, len(attributes)-1))
-        model.save('assets/model.keras')
+        
+
         return {"message": "Model compiled successfully"}, 200
    
 class FitModel(Resource):
     def post(self):
         epochs = request.get_json()['epochs']
         prediction_var = request.get_json()['pred']
+        layer_data = request.get_json()['layers']
+        
+        data = FloatTensor.readCSV("assets/data.csv")
+        data = data.Normalize()
         
         df = pd.read_csv("assets/data.csv")
-        X = df.drop(prediction_var, axis=1)
-        y = df[prediction_var]
-        print(X.shape, y.shape)
-        model = tf.keras.models.load_model('assets/model.keras')
-        history = model.fit(X, y, epochs=epochs)
-        model.save('assets/model.keras')
-        final_loss = history.history['loss'][-1]
-        return {"message": "Model fit successfully", "final_loss": final_loss}, 200
+        pred = df.columns.get_loc(prediction_var)
+        ind = [pred]
+        vals = data.input_output_split(ind)
+
+        input = vals[0]
+        output = vals[1]
+
+        # Split the input and output into rows
+        input_list = input.row_split()
+        output_list = output.row_split()
+
+        myPipeline = Pipeline()
+        # input_layer = Linear(IntPair(1, len(input_list)))
+
+        prev_layer = IntPair(1,input_list[0].getSize().second)
+        layers = {}
+        for layer in layer_data:
+            layers[layer['layerId']] = Linear(prev_layer, layer['units'])
+            prev_layer = IntPair(prev_layer[0], layer['units'])
+            myPipeline.add(layers[layer['layerId']])
+            if layer['activation'].lower() == 'relu':
+                val = str(layer['layerId']) + 'activaion'
+                layers [val] = Relu(prev_layer)
+                myPipeline.add(layers[val])
+        
+        myPipeline.printPipeline()
+        optimizer = SGD(1e-4)
+        a = MSELoss()
+        losses = []
+        # Train the model
+        for j in range(epochs):
+            for i in range(len(input_list)):
+                prediction = myPipeline.forwardFloat(input_list[i])
+                loss = (a.loss(prediction, output_list[i]))
+
+                myPipeline.backward(optimizer, a, output_list[i])
+            print(f"Epoch {j+1}, Loss: {loss}")
+            losses.append(loss)
+        print(str(losses[-1]))
+        msg = f"Model fit successfully, with a loss of {str(losses[-1])}"
+        return {"message": msg}, 200

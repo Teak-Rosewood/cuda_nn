@@ -18,6 +18,9 @@ public:
 
     Tensor<float> getGradients();
     ~Model();
+
+    virtual Model* copy() = 0;
+
     virtual int getParamCount() = 0;
     virtual std::pair<int,int> getInputSize() = 0;
     virtual std::pair<int,int> getOutputSize() = 0;
@@ -28,6 +31,7 @@ public:
     Tensor<float>* gradients = nullptr;
     Tensor<float>* inputs = nullptr;
 };
+
 
 Model::~Model() {
     if (trainable) {

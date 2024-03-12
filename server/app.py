@@ -31,4 +31,7 @@ CORS(app)
 if __name__ == '__main__':
     socketio = SocketIO(cors_allowed_origins='*')
     socketio.init_app(app)
-    socketio.run(app)
+    try:
+        socketio.run(app)
+    except:
+        socketio.run(app)

@@ -14,6 +14,7 @@ class Activation : public Model {
         int getParamCount() override;
         std::pair<int,int> getInputSize() override;
         std::pair<int,int> getOutputSize() override;
+        virtual Model* copy() = 0;
 
         std::pair<int,int> inputSize;
     private:

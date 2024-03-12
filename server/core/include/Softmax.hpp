@@ -11,10 +11,16 @@ class Softmax : public Activation
         Softmax(std::pair<int,int> inputSize, std::string type = "softmax");
         Tensor<float> forward(Tensor<float>) override;
         Tensor<float> OMPforward(Tensor<float>) override;
+        Model* copy() override;
 
         std::string type;
     private:
 };
+
+Model* Softmax::copy()
+{
+    return new Softmax(inputSize,type);
+}
 
 Softmax::Softmax(std::pair<int,int> inputSize,std::string type) : Activation(inputSize,type), type(type)
 {

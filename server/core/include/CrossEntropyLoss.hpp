@@ -12,8 +12,10 @@ public:
 
 float CrossEntropyLoss::loss(Tensor<float> prediction, Tensor<float> actual) {
     if (prediction.getSize() != actual.getSize())
+    {
         throw std::runtime_error("Invalid dimensions");
-
+    }
+        
     float sum = 0;
 
     for (int i = 0; i < prediction.getSize().first; ++i) {

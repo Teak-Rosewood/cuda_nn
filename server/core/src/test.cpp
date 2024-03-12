@@ -47,7 +47,7 @@ int main()
 
     auto start = std::chrono::high_resolution_clock::now();
 
-    for(int j=0;j<40;j++)
+    for(int j=0;j<1;j++)
     {
         float loss = 0;
         for(int i=0;i<input_list.size();i++)

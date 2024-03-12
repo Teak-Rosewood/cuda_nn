@@ -10,6 +10,7 @@ class Relu : public Activation
         Relu(std::pair<int,int> inputSize, std::string type = "relu");
         Tensor<float> forward(Tensor<float>) override;
         Tensor<float> OMPforward(Tensor<float>) override;
+        Model* copy() override;
 
 
         std::string type;
@@ -21,6 +22,11 @@ class Relu : public Activation
 Relu::Relu(std::pair<int,int> inputSize,std::string type) : Activation(inputSize,type), type(type)
 {
 
+}
+
+Model* Relu::copy()
+{
+    return new Relu(inputSize,type);
 }
 
 Tensor<float> Relu::forward(Tensor<float> input)

@@ -329,6 +329,7 @@ class FloatTensorVector(object):
 
     def capacity(self):
         return _arachne_nn.FloatTensorVector_capacity(self)
+    __swig_destroy__ = _arachne_nn.delete_FloatTensorVector
 
 # Register FloatTensorVector in _arachne_nn:
 _arachne_nn.FloatTensorVector_swigregister(FloatTensorVector)
@@ -540,6 +541,9 @@ class Model(object):
         return _arachne_nn.Model_getGradients(self)
     __swig_destroy__ = _arachne_nn.delete_Model
 
+    def copy(self):
+        return _arachne_nn.Model_copy(self)
+
     def getParamCount(self):
         return _arachne_nn.Model_getParamCount(self)
 
@@ -579,6 +583,9 @@ class Activation(Model):
 
     def getOutputSize(self):
         return _arachne_nn.Activation_getOutputSize(self)
+
+    def copy(self):
+        return _arachne_nn.Activation_copy(self)
     inputSize = property(_arachne_nn.Activation_inputSize_get, _arachne_nn.Activation_inputSize_set)
     __swig_destroy__ = _arachne_nn.delete_Activation
 
@@ -606,6 +613,9 @@ class Normalize(Model):
 
     def OMPforward(self, arg2):
         return _arachne_nn.Normalize_OMPforward(self, arg2)
+
+    def copy(self):
+        return _arachne_nn.Normalize_copy(self)
     __swig_destroy__ = _arachne_nn.delete_Normalize
 
 # Register Normalize in _arachne_nn:
@@ -679,7 +689,6 @@ class Pipeline(object):
 
     def __init__(self):
         _arachne_nn.Pipeline_swiginit(self, _arachne_nn.new_Pipeline())
-    __swig_destroy__ = _arachne_nn.delete_Pipeline
 
     def add(self, arg2):
         return _arachne_nn.Pipeline_add(self, arg2)
@@ -692,6 +701,7 @@ class Pipeline(object):
 
     def OMPbackward(self, arg2, arg3, arg4):
         return _arachne_nn.Pipeline_OMPbackward(self, arg2, arg3, arg4)
+    __swig_destroy__ = _arachne_nn.delete_Pipeline
 
     def forwardFloat(self, input):
         return _arachne_nn.Pipeline_forwardFloat(self, input)
@@ -720,6 +730,9 @@ class Flatten(Model):
 
     def OMPforward(self, arg2):
         return _arachne_nn.Flatten_OMPforward(self, arg2)
+
+    def copy(self):
+        return _arachne_nn.Flatten_copy(self)
     __swig_destroy__ = _arachne_nn.delete_Flatten
 
 # Register Flatten in _arachne_nn:
@@ -737,6 +750,9 @@ class Relu(Activation):
 
     def OMPforward(self, arg2):
         return _arachne_nn.Relu_OMPforward(self, arg2)
+
+    def copy(self):
+        return _arachne_nn.Relu_copy(self)
     type = property(_arachne_nn.Relu_type_get, _arachne_nn.Relu_type_set)
     __swig_destroy__ = _arachne_nn.delete_Relu
 
@@ -763,7 +779,6 @@ class Linear(Model):
 
     def __init__(self, inputSize, outputSize):
         _arachne_nn.Linear_swiginit(self, _arachne_nn.new_Linear(inputSize, outputSize))
-    __swig_destroy__ = _arachne_nn.delete_Linear
 
     def getParamCount(self):
         return _arachne_nn.Linear_getParamCount(self)
@@ -780,8 +795,12 @@ class Linear(Model):
     def OMPforward(self, arg2):
         return _arachne_nn.Linear_OMPforward(self, arg2)
 
+    def copy(self):
+        return _arachne_nn.Linear_copy(self)
+
     def printWeights(self):
         return _arachne_nn.Linear_printWeights(self)
+    __swig_destroy__ = _arachne_nn.delete_Linear
 
 # Register Linear in _arachne_nn:
 _arachne_nn.Linear_swigregister(Linear)
@@ -812,6 +831,9 @@ class Softmax(Activation):
 
     def OMPforward(self, arg2):
         return _arachne_nn.Softmax_OMPforward(self, arg2)
+
+    def copy(self):
+        return _arachne_nn.Softmax_copy(self)
     type = property(_arachne_nn.Softmax_type_get, _arachne_nn.Softmax_type_set)
     __swig_destroy__ = _arachne_nn.delete_Softmax
 

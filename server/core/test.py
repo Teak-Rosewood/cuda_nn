@@ -1,4 +1,4 @@
-from cuda_nn import FloatTensor, Linear, Pipeline, Relu, MSELoss, SGD, IntPair
+from arachne import FloatTensor, Linear, Pipeline, Relu, MSELoss, SGD, IntPair
 
 # Read the CSV file
 dat = FloatTensor.readCSV("WineQT.csv")
@@ -6,7 +6,7 @@ dat = FloatTensor.readCSV("WineQT.csv")
 # Normalize the data
 dat = dat.Normalize()
 
-# Split the data into input and output
+# # Split the data into input and output
 ind = [11]
 vals = dat.input_output_split(ind)
 input = vals[0]
@@ -25,7 +25,7 @@ d = Linear(IntPair(1,6),3)
 e = Relu(IntPair(1,3))
 f = Linear(IntPair(1,3),1)
 g = Relu(IntPair(1,1))
-print(type(q))
+
 # Add the layers to the pipeline
 myPipeline.add(q)
 myPipeline.add(r)
@@ -43,7 +43,7 @@ optimizer = SGD(1e-4)
 a = MSELoss()
 
 # Train the model
-for j in range(100):
+for j in range(10):
     for i in range(len(input_list)):
         prediction = myPipeline.forwardFloat(input_list[i])
 

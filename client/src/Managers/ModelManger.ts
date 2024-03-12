@@ -37,7 +37,7 @@ export class ModelManager {
         return res.message;
     }
 
-    async fitModel(epochs: number) {
+    async fitModel(epochs: number, layers: Layer[]) {
         const pred = this.prediction_var
         console.log(pred)
         const response = await fetch('http://localhost:5000/api/fit', {
@@ -45,9 +45,10 @@ export class ModelManager {
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ epochs, pred }),
+            body: JSON.stringify({ epochs, pred, layers }),
         });
         const res = await response.json();
+        console.log("got res")
         return res;
     }
 

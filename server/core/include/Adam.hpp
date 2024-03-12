@@ -27,12 +27,12 @@ Adam::~Adam()
 {
     for(auto i:m_v)
     {
-        delete i;
+        if(i != nullptr) delete i;
     }
 
     for(auto i:v_v)
     {
-        delete i;
+        if(i != nullptr) delete i;
     }
 }
 

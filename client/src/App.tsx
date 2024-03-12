@@ -51,7 +51,7 @@ function App() {
             setStatus("Epochs has to be greater than 0");
             return;
         }
-        const res = await model?.fitModel(epochs);
+        const res = await model?.fitModel(epochs, layers);
         // setModelFile(res.model);
         setStatus(res.message);
     };

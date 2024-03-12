@@ -21,7 +21,7 @@ RMSProp::~RMSProp()
 {
     for(auto i:accumulated_gradient_squared)
     {
-        delete i;
+        if(i != nullptr) delete i;
     }
 }
 

@@ -28,11 +28,9 @@ namespace std {
     %template(IntVector) vector<int>;
     %template(FloatTensorVector) vector<Tensor<float>>;
 }
-%extend std::vector<Tensor<float>> {
-    ~vector() {
-        for (size_t i = 0; i < self->size(); ++i) {
-            delete (*self)[i];
-        }
+%extend Pipeline {
+    ~Pipeline() {
+
     }
 }
 %template(FloatTensor) Tensor<float>;

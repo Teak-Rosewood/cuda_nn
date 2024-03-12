@@ -5318,6 +5318,9 @@ SWIG_From_std_string  (const std::string& s)
   return SWIG_FromCharPtrAndSize(s.data(), s.size());
 }
 
+SWIGINTERN void delete_Pipeline(Pipeline *self){
+
+    }
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -9740,6 +9743,28 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_delete_FloatTensorVector(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< Tensor< float > > *arg1 = (std::vector< Tensor< float > > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject *swig_obj[1] ;
+  
+  if (!args) SWIG_fail;
+  swig_obj[0] = args;
+  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_std__vectorT_TensorT_float_t_std__allocatorT_TensorT_float_t_t_t, SWIG_POINTER_DISOWN |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "delete_FloatTensorVector" "', argument " "1"" of type '" "std::vector< Tensor< float > > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< Tensor< float > > * >(argp1);
+  delete arg1;
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *FloatTensorVector_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *obj;
   if (!SWIG_Python_UnpackTuple(args, "swigregister", 1, 1, &obj)) return NULL;
@@ -11956,6 +11981,29 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_Model_copy(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Model *arg1 = (Model *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject *swig_obj[1] ;
+  Model *result = 0 ;
+  
+  if (!args) SWIG_fail;
+  swig_obj[0] = args;
+  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_Model, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Model_copy" "', argument " "1"" of type '" "Model *""'"); 
+  }
+  arg1 = reinterpret_cast< Model * >(argp1);
+  result = (Model *)(arg1)->copy();
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_Model, 0 |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *_wrap_Model_getParamCount(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   Model *arg1 = (Model *) 0 ;
@@ -12496,6 +12544,29 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_Activation_copy(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Activation *arg1 = (Activation *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject *swig_obj[1] ;
+  Model *result = 0 ;
+  
+  if (!args) SWIG_fail;
+  swig_obj[0] = args;
+  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_Activation, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Activation_copy" "', argument " "1"" of type '" "Activation *""'"); 
+  }
+  arg1 = reinterpret_cast< Activation * >(argp1);
+  result = (Model *)(arg1)->copy();
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_Model, 0 |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *_wrap_Activation_inputSize_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   Activation *arg1 = (Activation *) 0 ;
@@ -12741,6 +12812,29 @@ SWIGINTERN PyObject *_wrap_Normalize_OMPforward(PyObject *SWIGUNUSEDPARM(self), 
   }
   result = (arg1)->OMPforward(arg2);
   resultobj = SWIG_NewPointerObj((new Tensor< float >(static_cast< const Tensor< float >& >(result))), SWIGTYPE_p_TensorT_float_t, SWIG_POINTER_OWN |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_Normalize_copy(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Normalize *arg1 = (Normalize *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject *swig_obj[1] ;
+  Model *result = 0 ;
+  
+  if (!args) SWIG_fail;
+  swig_obj[0] = args;
+  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_Normalize, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Normalize_copy" "', argument " "1"" of type '" "Normalize *""'"); 
+  }
+  arg1 = reinterpret_cast< Normalize * >(argp1);
+  result = (Model *)(arg1)->copy();
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_Model, 0 |  0 );
   return resultobj;
 fail:
   return NULL;
@@ -13503,28 +13597,6 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_delete_Pipeline(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  Pipeline *arg1 = (Pipeline *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  PyObject *swig_obj[1] ;
-  
-  if (!args) SWIG_fail;
-  swig_obj[0] = args;
-  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_Pipeline, SWIG_POINTER_DISOWN |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "delete_Pipeline" "', argument " "1"" of type '" "Pipeline *""'"); 
-  }
-  arg1 = reinterpret_cast< Pipeline * >(argp1);
-  delete arg1;
-  resultobj = SWIG_Py_Void();
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
 SWIGINTERN PyObject *_wrap_Pipeline_add(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   Pipeline *arg1 = (Pipeline *) 0 ;
@@ -13675,6 +13747,28 @@ SWIGINTERN PyObject *_wrap_Pipeline_OMPbackward(PyObject *SWIGUNUSEDPARM(self), 
     }
   }
   (arg1)->OMPbackward(arg2,arg3,arg4);
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_delete_Pipeline(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Pipeline *arg1 = (Pipeline *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject *swig_obj[1] ;
+  
+  if (!args) SWIG_fail;
+  swig_obj[0] = args;
+  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_Pipeline, SWIG_POINTER_DISOWN |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "delete_Pipeline" "', argument " "1"" of type '" "Pipeline *""'"); 
+  }
+  arg1 = reinterpret_cast< Pipeline * >(argp1);
+  delete_Pipeline(arg1);
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
@@ -13901,6 +13995,29 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_Flatten_copy(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Flatten *arg1 = (Flatten *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject *swig_obj[1] ;
+  Model *result = 0 ;
+  
+  if (!args) SWIG_fail;
+  swig_obj[0] = args;
+  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_Flatten, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Flatten_copy" "', argument " "1"" of type '" "Flatten *""'"); 
+  }
+  arg1 = reinterpret_cast< Flatten * >(argp1);
+  result = (Model *)(arg1)->copy();
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_Model, 0 |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *_wrap_delete_Flatten(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   Flatten *arg1 = (Flatten *) 0 ;
@@ -14098,6 +14215,29 @@ SWIGINTERN PyObject *_wrap_Relu_OMPforward(PyObject *SWIGUNUSEDPARM(self), PyObj
   }
   result = (arg1)->OMPforward(arg2);
   resultobj = SWIG_NewPointerObj((new Tensor< float >(static_cast< const Tensor< float >& >(result))), SWIGTYPE_p_TensorT_float_t, SWIG_POINTER_OWN |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_Relu_copy(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Relu *arg1 = (Relu *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject *swig_obj[1] ;
+  Model *result = 0 ;
+  
+  if (!args) SWIG_fail;
+  swig_obj[0] = args;
+  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_Relu, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Relu_copy" "', argument " "1"" of type '" "Relu *""'"); 
+  }
+  arg1 = reinterpret_cast< Relu * >(argp1);
+  result = (Model *)(arg1)->copy();
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_Model, 0 |  0 );
   return resultobj;
 fail:
   return NULL;
@@ -14488,28 +14628,6 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_delete_Linear(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  Linear *arg1 = (Linear *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  PyObject *swig_obj[1] ;
-  
-  if (!args) SWIG_fail;
-  swig_obj[0] = args;
-  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_Linear, SWIG_POINTER_DISOWN |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "delete_Linear" "', argument " "1"" of type '" "Linear *""'"); 
-  }
-  arg1 = reinterpret_cast< Linear * >(argp1);
-  delete arg1;
-  resultobj = SWIG_Py_Void();
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
 SWIGINTERN PyObject *_wrap_Linear_getParamCount(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   Linear *arg1 = (Linear *) 0 ;
@@ -14655,6 +14773,29 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_Linear_copy(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Linear *arg1 = (Linear *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject *swig_obj[1] ;
+  Model *result = 0 ;
+  
+  if (!args) SWIG_fail;
+  swig_obj[0] = args;
+  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_Linear, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Linear_copy" "', argument " "1"" of type '" "Linear *""'"); 
+  }
+  arg1 = reinterpret_cast< Linear * >(argp1);
+  result = (Model *)(arg1)->copy();
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_Model, 0 |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *_wrap_Linear_printWeights(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   Linear *arg1 = (Linear *) 0 ;
@@ -14670,6 +14811,28 @@ SWIGINTERN PyObject *_wrap_Linear_printWeights(PyObject *SWIGUNUSEDPARM(self), P
   }
   arg1 = reinterpret_cast< Linear * >(argp1);
   (arg1)->printWeights();
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_delete_Linear(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Linear *arg1 = (Linear *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject *swig_obj[1] ;
+  
+  if (!args) SWIG_fail;
+  swig_obj[0] = args;
+  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_Linear, SWIG_POINTER_DISOWN |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "delete_Linear" "', argument " "1"" of type '" "Linear *""'"); 
+  }
+  arg1 = reinterpret_cast< Linear * >(argp1);
+  delete arg1;
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
@@ -15098,6 +15261,29 @@ SWIGINTERN PyObject *_wrap_Softmax_OMPforward(PyObject *SWIGUNUSEDPARM(self), Py
   }
   result = (arg1)->OMPforward(arg2);
   resultobj = SWIG_NewPointerObj((new Tensor< float >(static_cast< const Tensor< float >& >(result))), SWIGTYPE_p_TensorT_float_t, SWIG_POINTER_OWN |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_Softmax_copy(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Softmax *arg1 = (Softmax *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject *swig_obj[1] ;
+  Model *result = 0 ;
+  
+  if (!args) SWIG_fail;
+  swig_obj[0] = args;
+  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_Softmax, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Softmax_copy" "', argument " "1"" of type '" "Softmax *""'"); 
+  }
+  arg1 = reinterpret_cast< Softmax * >(argp1);
+  result = (Model *)(arg1)->copy();
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_Model, 0 |  0 );
   return resultobj;
 fail:
   return NULL;
@@ -15591,6 +15777,7 @@ static PyMethodDef SwigMethods[] = {
 	 { "FloatTensorVector_insert", _wrap_FloatTensorVector_insert, METH_VARARGS, NULL},
 	 { "FloatTensorVector_reserve", _wrap_FloatTensorVector_reserve, METH_VARARGS, NULL},
 	 { "FloatTensorVector_capacity", _wrap_FloatTensorVector_capacity, METH_O, NULL},
+	 { "delete_FloatTensorVector", _wrap_delete_FloatTensorVector, METH_O, NULL},
 	 { "FloatTensorVector_swigregister", FloatTensorVector_swigregister, METH_O, NULL},
 	 { "FloatTensorVector_swiginit", FloatTensorVector_swiginit, METH_VARARGS, NULL},
 	 { "new_FloatTensor", _wrap_new_FloatTensor, METH_VARARGS, NULL},
@@ -15658,6 +15845,7 @@ static PyMethodDef SwigMethods[] = {
 	 { "Model_OMPcomputeGradients", _wrap_Model_OMPcomputeGradients, METH_VARARGS, NULL},
 	 { "Model_getGradients", _wrap_Model_getGradients, METH_O, NULL},
 	 { "delete_Model", _wrap_delete_Model, METH_O, NULL},
+	 { "Model_copy", _wrap_Model_copy, METH_O, NULL},
 	 { "Model_getParamCount", _wrap_Model_getParamCount, METH_O, NULL},
 	 { "Model_getInputSize", _wrap_Model_getInputSize, METH_O, NULL},
 	 { "Model_getOutputSize", _wrap_Model_getOutputSize, METH_O, NULL},
@@ -15679,6 +15867,7 @@ static PyMethodDef SwigMethods[] = {
 	 { "Activation_getParamCount", _wrap_Activation_getParamCount, METH_O, NULL},
 	 { "Activation_getInputSize", _wrap_Activation_getInputSize, METH_O, NULL},
 	 { "Activation_getOutputSize", _wrap_Activation_getOutputSize, METH_O, NULL},
+	 { "Activation_copy", _wrap_Activation_copy, METH_O, NULL},
 	 { "Activation_inputSize_set", _wrap_Activation_inputSize_set, METH_VARARGS, NULL},
 	 { "Activation_inputSize_get", _wrap_Activation_inputSize_get, METH_O, NULL},
 	 { "delete_Activation", _wrap_delete_Activation, METH_O, NULL},
@@ -15689,6 +15878,7 @@ static PyMethodDef SwigMethods[] = {
 	 { "Normalize_getOutputSize", _wrap_Normalize_getOutputSize, METH_O, NULL},
 	 { "Normalize_forward", _wrap_Normalize_forward, METH_VARARGS, NULL},
 	 { "Normalize_OMPforward", _wrap_Normalize_OMPforward, METH_VARARGS, NULL},
+	 { "Normalize_copy", _wrap_Normalize_copy, METH_O, NULL},
 	 { "delete_Normalize", _wrap_delete_Normalize, METH_O, NULL},
 	 { "Normalize_swigregister", Normalize_swigregister, METH_O, NULL},
 	 { "Normalize_swiginit", Normalize_swiginit, METH_VARARGS, NULL},
@@ -15711,11 +15901,11 @@ static PyMethodDef SwigMethods[] = {
 	 { "CrossEntropyLoss_swigregister", CrossEntropyLoss_swigregister, METH_O, NULL},
 	 { "CrossEntropyLoss_swiginit", CrossEntropyLoss_swiginit, METH_VARARGS, NULL},
 	 { "new_Pipeline", _wrap_new_Pipeline, METH_NOARGS, NULL},
-	 { "delete_Pipeline", _wrap_delete_Pipeline, METH_O, NULL},
 	 { "Pipeline_add", _wrap_Pipeline_add, METH_VARARGS, NULL},
 	 { "Pipeline_printPipeline", _wrap_Pipeline_printPipeline, METH_O, NULL},
 	 { "Pipeline_backward", _wrap_Pipeline_backward, METH_VARARGS, NULL},
 	 { "Pipeline_OMPbackward", _wrap_Pipeline_OMPbackward, METH_VARARGS, NULL},
+	 { "delete_Pipeline", _wrap_delete_Pipeline, METH_O, NULL},
 	 { "Pipeline_forwardFloat", _wrap_Pipeline_forwardFloat, METH_VARARGS, NULL},
 	 { "Pipeline_swigregister", Pipeline_swigregister, METH_O, NULL},
 	 { "Pipeline_swiginit", Pipeline_swiginit, METH_VARARGS, NULL},
@@ -15725,12 +15915,14 @@ static PyMethodDef SwigMethods[] = {
 	 { "Flatten_getOutputSize", _wrap_Flatten_getOutputSize, METH_O, NULL},
 	 { "Flatten_forward", _wrap_Flatten_forward, METH_VARARGS, NULL},
 	 { "Flatten_OMPforward", _wrap_Flatten_OMPforward, METH_VARARGS, NULL},
+	 { "Flatten_copy", _wrap_Flatten_copy, METH_O, NULL},
 	 { "delete_Flatten", _wrap_delete_Flatten, METH_O, NULL},
 	 { "Flatten_swigregister", Flatten_swigregister, METH_O, NULL},
 	 { "Flatten_swiginit", Flatten_swiginit, METH_VARARGS, NULL},
 	 { "new_Relu", _wrap_new_Relu, METH_VARARGS, NULL},
 	 { "Relu_forward", _wrap_Relu_forward, METH_VARARGS, NULL},
 	 { "Relu_OMPforward", _wrap_Relu_OMPforward, METH_VARARGS, NULL},
+	 { "Relu_copy", _wrap_Relu_copy, METH_O, NULL},
 	 { "Relu_type_set", _wrap_Relu_type_set, METH_VARARGS, NULL},
 	 { "Relu_type_get", _wrap_Relu_type_get, METH_O, NULL},
 	 { "delete_Relu", _wrap_delete_Relu, METH_O, NULL},
@@ -15742,13 +15934,14 @@ static PyMethodDef SwigMethods[] = {
 	 { "RMSProp_swigregister", RMSProp_swigregister, METH_O, NULL},
 	 { "RMSProp_swiginit", RMSProp_swiginit, METH_VARARGS, NULL},
 	 { "new_Linear", _wrap_new_Linear, METH_VARARGS, NULL},
-	 { "delete_Linear", _wrap_delete_Linear, METH_O, NULL},
 	 { "Linear_getParamCount", _wrap_Linear_getParamCount, METH_O, NULL},
 	 { "Linear_getInputSize", _wrap_Linear_getInputSize, METH_O, NULL},
 	 { "Linear_getOutputSize", _wrap_Linear_getOutputSize, METH_O, NULL},
 	 { "Linear_forward", _wrap_Linear_forward, METH_VARARGS, NULL},
 	 { "Linear_OMPforward", _wrap_Linear_OMPforward, METH_VARARGS, NULL},
+	 { "Linear_copy", _wrap_Linear_copy, METH_O, NULL},
 	 { "Linear_printWeights", _wrap_Linear_printWeights, METH_O, NULL},
+	 { "delete_Linear", _wrap_delete_Linear, METH_O, NULL},
 	 { "Linear_swigregister", Linear_swigregister, METH_O, NULL},
 	 { "Linear_swiginit", Linear_swiginit, METH_VARARGS, NULL},
 	 { "new_SGD", _wrap_new_SGD, METH_VARARGS, NULL},
@@ -15759,6 +15952,7 @@ static PyMethodDef SwigMethods[] = {
 	 { "new_Softmax", _wrap_new_Softmax, METH_VARARGS, NULL},
 	 { "Softmax_forward", _wrap_Softmax_forward, METH_VARARGS, NULL},
 	 { "Softmax_OMPforward", _wrap_Softmax_OMPforward, METH_VARARGS, NULL},
+	 { "Softmax_copy", _wrap_Softmax_copy, METH_O, NULL},
 	 { "Softmax_type_set", _wrap_Softmax_type_set, METH_VARARGS, NULL},
 	 { "Softmax_type_get", _wrap_Softmax_type_get, METH_O, NULL},
 	 { "delete_Softmax", _wrap_delete_Softmax, METH_O, NULL},

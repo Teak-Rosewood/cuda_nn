@@ -40,7 +40,7 @@ Pipeline::~Pipeline()
 {
     for(auto model: network)
     {
-        delete model;
+        if(model!=nullptr) delete model;
     }
     network.clear();
 }

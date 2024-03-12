@@ -11,12 +11,19 @@ public:
     std::pair<int,int> getOutputSize() override;
     Tensor<float> forward(Tensor<float>) override;
     Tensor<float> OMPforward(Tensor<float>) override;
+    Model* copy() override;
+
 
 private:
     std::pair<int,int> inputSize;
     std::pair<int,int> outputSize;
     int paramCount;
 };
+
+Model* Flatten::copy()
+{
+    return new Flatten(inputSize);
+}
 
 Flatten::Flatten(std::pair<int,int> inputSize) : Model("Flatten",false) , inputSize(inputSize) , outputSize(1,inputSize.first*inputSize.second)
 {

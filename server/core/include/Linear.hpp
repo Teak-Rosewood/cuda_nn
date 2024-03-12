@@ -9,12 +9,12 @@
 class Linear : public Model {
 public:
     Linear(std::pair<int,int> inputSize, int outputSize);
-    ~Linear();
     int getParamCount() override;
     std::pair<int,int> getInputSize() override;
     std::pair<int,int> getOutputSize() override;
     Tensor<float> forward(Tensor<float>) override;
     Tensor<float> OMPforward(Tensor<float>) override;
+    Model* copy() override;
 
     void printWeights();
 
@@ -24,6 +24,10 @@ private:
     int paramCount;
     std::pair<int,int> weight_size;
 };
+
+Model* Linear::copy(){
+    return new Linear(inputSize,outputSize.second);
+}
 
 Linear::Linear(std::pair<int,int> inputSize, int outputSize) : Model("Linear",true),inputSize(inputSize), outputSize(make_pair(inputSize.first,outputSize))
 {
@@ -52,11 +56,6 @@ Linear::Linear(std::pair<int,int> inputSize, int outputSize) : Model("Linear",tr
     }
 
     delete[] data;
-}
-
-Linear::~Linear()
-{
-
 }
 
 int Linear::getParamCount()

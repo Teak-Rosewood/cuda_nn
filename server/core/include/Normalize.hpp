@@ -14,12 +14,18 @@ public:
     std::pair<int,int> getOutputSize() override;
     Tensor<float> forward(Tensor<float>) override;
     Tensor<float> OMPforward(Tensor<float>) override;
+    Model* copy() override;
 
 private:
     std::pair<int,int> inputSize;
     std::pair<int,int> outputSize;
     int paramCount;
 };
+
+Model* Normalize::copy()
+{
+    return new Normalize(inputSize);
+}
 
 Normalize::Normalize(std::pair<int,int> inputSize) : Model("Normalization",false), inputSize(inputSize)
 {
