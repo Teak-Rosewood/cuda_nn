@@ -88,7 +88,7 @@ public:
     // Helper functions
     pair<int,int> getSize();
     void printSize();
-    void print();
+    void printTensor();
     T** data;
     pair<int,int> size;
 private:
@@ -149,7 +149,7 @@ pair<int,int> Tensor<T>::getSize()
 }
 
 template<typename T>
-void Tensor<T>::print()
+void Tensor<T>::printTensor()
 {
     for(int i=0;i<size.first;i++)
     {
@@ -811,7 +811,6 @@ Tensor<T> Tensor<T>::reshape(pair<int,int> size)
     }
 
     Tensor<T> temp = this->flatten();
-    temp.print();
 
     int curr_row = 0,curr_col=0;
     for(int i = 0; i< temp.getSize().second;i++)

@@ -17,7 +17,7 @@ public:
     void OMPcomputeGradients(Tensor<float>,bool);
 
     Tensor<float> getGradients();
-    virtual ~Model() {}
+    ~Model();
     virtual int getParamCount() = 0;
     virtual std::pair<int,int> getInputSize() = 0;
     virtual std::pair<int,int> getOutputSize() = 0;
@@ -28,6 +28,13 @@ public:
     Tensor<float>* gradients;
     Tensor<float>* inputs;
 };
+
+Model::~Model()
+{
+    delete weights;
+    delete gradients;
+    delete inputs;
+}
 
 void Model::backward(Tensor<float> last_gradient,Tensor<float>& gradient,bool local)
 {

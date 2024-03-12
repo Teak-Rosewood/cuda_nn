@@ -440,8 +440,8 @@ class FloatTensor(object):
     def printSize(self):
         return _cudann.FloatTensor_printSize(self)
 
-    def _print(self):
-        return _cudann.FloatTensor__print(self)
+    def printTensor(self):
+        return _cudann.FloatTensor_printTensor(self)
     data = property(_cudann.FloatTensor_data_get, _cudann.FloatTensor_data_set)
     size = property(_cudann.FloatTensor_size_get, _cudann.FloatTensor_size_set)
 
@@ -679,6 +679,7 @@ class Pipeline(object):
 
     def __init__(self):
         _cudann.Pipeline_swiginit(self, _cudann.new_Pipeline())
+    __swig_destroy__ = _cudann.delete_Pipeline
 
     def add(self, arg2):
         return _cudann.Pipeline_add(self, arg2)
@@ -694,7 +695,6 @@ class Pipeline(object):
 
     def forwardFloat(self, input):
         return _cudann.Pipeline_forwardFloat(self, input)
-    __swig_destroy__ = _cudann.delete_Pipeline
 
 # Register Pipeline in _cudann:
 _cudann.Pipeline_swigregister(Pipeline)
