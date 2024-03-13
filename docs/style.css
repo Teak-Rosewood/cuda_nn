@@ -47,6 +47,10 @@ body {
     font-weight: 500;
 }
 
+.sidebar-sub-header {
+    font-size: 100%;
+}
+
 .sidebar-main-header {
     font-size: 150%;
     font-weight: 400;

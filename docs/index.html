@@ -2,81 +2,109 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Documentation</title>
-    <link rel="stylesheet" href="style.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Madimi+One&family=Ojuju:wght@200..800&display=swap"
-        rel="stylesheet">
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Documentation</title>
+        <link rel="stylesheet" href="style.css">
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Madimi+One&family=Ojuju:wght@200..800&display=swap"
+                rel="stylesheet">
+        <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+        <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 </head>
 
 <body>
-    <div class="sidebar">
-        <div class="sidebar-header">Arachne</div>
-        <ul>
-            <li><a class="sidebar-main-header" href="#section1">Overview</a></li>
-            <li><a class="sidebar-main-header" href="#section2">Getting Started</a></li>
-            <li><a class="sidebar-main-header" href="#section3">Codeless setup</a></li>
-            <li><a class="sidebar-main-header" href="#section4">Tensor</a></li>
-            <li><a class="sidebar-main-header" href="#section5">Model layers</a></li>
-            <li><a class="sidebar-main-header" href="#section6">Activation layers</a></li>
-            <li><a class="sidebar-main-header" href="#section7">Loss functions</a></li>
-            <li><a class="sidebar-main-header" href="#section8">Optimizers</a></li>
-            <li><a class="sidebar-main-header" href="#section9">Pipeline</a></li>
-            <li><a class="sidebar-main-header" href="#section10">Examples</a></li>
+        <div class="sidebar">
+                <div class="sidebar-header">Arachne</div>
+                <ul>
+                        <li><a class="sidebar-main-header" href="#section1">Overview</a></li>
+                        <li><a class="sidebar-main-header" href="#section2">Getting Started</a></li>
+                        <li><a class="sidebar-main-header" href="#section3">Codeless setup</a></li>
+                        <li><a class="sidebar-main-header" href="#cpp">C++ Documentation</a>
+                                <ul>
+                                        <br>
+                                        <li><a class="sidebar-sub-header" href="#section4">Tensor</a></li>
+                                        <li><a class="sidebar-sub-header" href="#section5">Model layers</a></li>
+                                        <li><a class="sidebar-sub-header" href="#section6">Activation layers</a></li>
+                                        <li><a class="sidebar-sub-header" href="#section7">Loss functions</a></li>
+                                        <li><a class="sidebar-sub-header" href="#section8">Optimizers</a></li>
+                                        <li><a class="sidebar-sub-header" href="#section9">Pipeline</a></li>
+                                        <br>
+                                </ul>
+                        </li>
+                        <li><a class="sidebar-main-header" href="#python">Python API Documentation</a>
+                                <ul>
+                                        <br>
+                                        <li><a class="sidebar-sub-header" href="#section10">Tensor</a></li>
+                                        <li><a class="sidebar-sub-header" href="#section11">Model layers</a></li>
+                                        <li><a class="sidebar-sub-header" href="#section12">Activation layers</a></li>
+                                        <li><a class="sidebar-sub-header" href="#section13">Loss functions</a></li>
+                                        <li><a class="sidebar-sub-header" href="#section14">Optimizers</a></li>
+                                        <li><a class="sidebar-sub-header" href="#section15">Pipeline</a></li>
+                                        <br>
+                                </ul>
+                        </li>
+                        <li><a class="sidebar-main-header" href="#">Examples</a></li>
 
-            <!-- Add more section links as needed -->
-        </ul>
-    </div>
-    <div class="content">
-        <div class="header">Arachne</div>
-        <h1 id="section1">Overview</h1>
-        <p>Arachne is a comprehensive deep learning library offering CUDA support for accelerated
-            computations on NVIDIA
-            GPUs, OpenMP speedup for optimizing performance on multicore CPUs, a full C++ implementation for efficiency
-            and control over memory management, and a Python wrapper or API for seamless integration with the extensive
-            Python ecosystem. With these features, Arachne provides users with a powerful toolkit for developing and
-            deploying deep learning models efficiently, enabling tasks ranging from rapid prototyping to
-            high-performance computing environments. Arachne also provides a code free environment to auto create and
-            train models on simple datasets(Beta)</p>
-        <h1 id="section2">Getting started</h1>
-        <p>Clone the GitHub repository given below to install from source</p>
-        <code>git clone https://github.com/Aansh2003/Arachne.git</code>
-        <p>Go to the build directory</p>
-        <code>cd Arachne/server/core/build</code>
-        <p>Create the CMake and make the library</p>
-        <code>cmake ..</code>
-        <br>
-        <code>make</code>
-        <p>If you want to add a C++ source file, create the file and re initiate the cmake after adding the following
-            line to CMakeLists.txt, in the core directory.</p>
-        <code>file(GLOB_RECURSE TEST_SOURCES "src/your_file_name.cpp")</code>
-        <h1 id="section3">Codeless Setup</h1>
-        <p>Configuring the server</p>
-        <code>cd Arachne/server</code>
-        <br>
-        <code>pip3 install -r requirements.txt</code>
-        <p>Configuring the client</p>
-        <code></code>
+                        <!-- Add more section links as needed -->
+                </ul>
+        </div>
+        <div class="content">
+                <div class="header">Arachne</div>
+                <h1 id="section1">Overview</h1>
+                <p>Arachne is a comprehensive deep learning library offering CUDA support for accelerated
+                        computations on NVIDIA
+                        GPUs, OpenMP speedup for optimizing performance on multicore CPUs, a full C++ implementation for
+                        efficiency
+                        and control over memory management, and a Python wrapper or API for seamless integration with
+                        the extensive
+                        Python ecosystem. With these features, Arachne provides users with a powerful toolkit for
+                        developing and
+                        deploying deep learning models efficiently, enabling tasks ranging from rapid prototyping to
+                        high-performance computing environments. Arachne also provides a code free environment to auto
+                        create and
+                        train models on simple datasets(Beta)</p>
+                <h1 id="section2">Getting started</h1>
+                <p>Clone the GitHub repository given below to install from source</p>
+                <code>git clone https://github.com/Aansh2003/Arachne.git</code>
+                <p>Go to the build directory</p>
+                <code>cd Arachne/server/core/build</code>
+                <p>Create the CMake and make the library</p>
+                <code>cmake ..</code>
+                <br>
+                <code>make</code>
+                <p>If you want to add a C++ source file, create the file and re initiate the cmake after adding the
+                        following
+                        line to CMakeLists.txt, in the core directory.</p>
+                <code>file(GLOB_RECURSE TEST_SOURCES "src/your_file_name.cpp")</code>
+                <h1 id="section3">Codeless Setup</h1>
+                <p>Configuring the server</p>
+                <code>cd Arachne/server</code>
+                <br>
+                <code>pip3 install -r requirements.txt</code>
+                <p>Configuring the client</p>
+                <code></code>
 
-        <h1 id="section4">Tensor</h1>
-        <p>Constructor definitions - C++</p>
-        <p>2D array -> Tensor</p>
-        <code>Tensor(T**,std::pair &ltint,int&gt);</code>
+                <h1 id="cpp">C++ Documentation</h1>
+                <h1 id="section4">Tensor</h1>
+                <p>Constructor definitions - C++</p>
+                <p>2D array -> Tensor</p>
+                <code>Tensor(T**,std::pair &ltint,int&gt);</code>
 
-        <p>Copy from another Tensor</p>
-        <code>Tensor(const Tensor& other);</code>
+                <p>Copy from another Tensor</p>
+                <code>Tensor(const Tensor& other);</code>
 
-        <P>Create a tensor with a given default value for a given size</P>
-        <code>Tensor(pair<int,int>,T);</code>
+                <P>Create a tensor with a given default value for a given size</P>
+                <code>Tensor(pair<int,int>,T);</code>
 
-        <p>Printing data</p>
-        <code>Tensor &ltint&gt a = Tensor &ltint&gt (make_pair(2,2),2);</code><br>
-        <code>a.printTensor();</code>
-        <p>Operations of Tensors</p>
-        <pre>
+                <p>Printing data</p>
+                <code>Tensor &ltint&gt a = Tensor &ltint&gt (make_pair(2,2),2);</code><br>
+                <code>a.printTensor();</code>
+                <p>Read data from a pre-processed CSV file</p>
+                <code>Tensor&ltfloat&gt a = Tensor&ltfloat&gt::readCSV(filepath)</code>
+                <p>Operations of Tensors</p>
+                <pre>
             <code>
 Tensor &ltint&gt a = Tensor &ltint&gt (std::make_pair(2,2),5);
 Tensor &ltint&gt b = Tensor &ltint&gt (std::make_pair(2,2),1);
@@ -87,50 +115,50 @@ Tensor &ltint&gt product = a*b;
 </code>
         </pre>
 
-        <p>Converting to float tensors (Useful when using pipelines)</p>
-        <pre>
+                <p>Converting to float tensors (Useful when using pipelines)</p>
+                <pre>
 <code>
 Tensor &ltint&gt a = Tensor &ltint&gt (std::make_pair(2,2),5);
 Tensor &ltfloat&gt b = a.convertFloat();
 </code>
         </pre>
-        <p>Creating randomized data</p>
-        <pre>
+                <p>Creating randomized data</p>
+                <pre>
 Tensor &ltint&gt a = Tensor &ltint&gt randomTensor(make_pair(2,2));
 Tensor &ltint&gt b = Tensor &ltint&gt randomTensor(std::make_pair(2,2),10,20); // Random values with minimum of 10 and maximum of 20
 Tensor &ltfloat&gt c = Tensor &ltfloat&gt randomFloatTensor(make_pair(2,2));
 </pre>
-        <p>Data preprocessing (Minimal functionality)</p>
-        <p>Normalizing data column wise</p>
-        <pre>
+                <p>Data preprocessing (Minimal functionality)</p>
+                <p>Normalizing data column wise</p>
+                <pre>
 <code>
 Tensor &ltfloat&gt a = Tensor &ltfloat&gt randomFloatTensor(make_pair(2,2));
 a = a.Normalize();
 </code>
 </pre>
-        <p>Flatten Tensor to 1D</p>
-        <pre>
+                <p>Flatten Tensor to 1D</p>
+                <pre>
 <code>
 Tensor &ltfloat&gt a = Tensor &ltfloat&gt randomFloatTensor(make_pair(2,2));
 a = a.flatten();
 </code>
         </pre>
-        <p>Reshape to desired size</p>
-        <pre>
+                <p>Reshape to desired size</p>
+                <pre>
 <code>
 Tensor &ltfloat&gt a = Tensor &ltfloat&gt randomFloatTensor(make_pair(2,2));
 a = a.reshape(make_pair(4,1));
 </code>
         </pre>
-        <p>Splitting each row of a Tensor into a new Tensor</p>
-        <pre>
+                <p>Splitting each row of a Tensor into a new Tensor</p>
+                <pre>
 <code>
 Tensor &ltfloat&gt a = Tensor &ltfloat&gt randomFloatTensor(make_pair(2,2));
 vector&ltTensor&ltfloat&gt&gt a_list = a.row_split();
 </code>
         </pre>
-        <p>Split input and output based on indices</p>
-        <pre>
+                <p>Split input and output based on indices</p>
+                <pre>
 <code>
 vector&ltint&gt indices;
 indices.push_back(1); // Push back as many column indices are required outputs
@@ -138,15 +166,15 @@ Tensor &ltfloat&gt a = Tensor &ltfloat&gt randomFloatTensor(make_pair(2,2));
 pair &ltTensor&ltfloat&gt,&ltTensor&ltfloat&gt&gt pair_tensor = a.input_output_split(ind);
 </code>
         </pre>
-        <p>Transpose Tensor in place</p>
-        <pre>
+                <p>Transpose Tensor in place</p>
+                <pre>
 <code>
 Tensor &ltfloat&gt a = Tensor &ltfloat&gt randomFloatTensor(make_pair(2,2));
 a.transpose();
 </code>
         </pre>
-        <p>Matrix operation functions</p>
-        <pre>
+                <p>Matrix operation functions</p>
+                <pre>
 <code>
 Tensor &ltint&gt a = Tensor &ltint&gt (std::make_pair(2,2),5);
 Tensor &ltint&gt b = Tensor &ltint&gt (std::make_pair(2,2),1);
@@ -154,19 +182,251 @@ Tensor &ltint&gt b = Tensor &ltint&gt (std::make_pair(2,2),1);
 a = a.multiply(b);
 </code>
         </pre>
-        <p>All the following operations work in the same way as the previous example.</p>
-        <ul>
-            <li>OMPmultiply</li>
-            <li>elem_multiply</li>
-            <li>scalarMultiply</li>
-            <li>add</li>
-            <li>scalarAdd</li>
-            <li>divide</li>
-        </ul>
-        <h1 id="section5">Model layers</h1>
-        <p>Linear</p>
-        <p>Trainable layer</p>
-    </div>
+                <p>All the following operations work in the same way as the previous example.</p>
+                <ul>
+                        <li>OMPmultiply</li>
+                        <li>elem_multiply</li>
+                        <li>scalarMultiply</li>
+                        <li>add</li>
+                        <li>scalarAdd</li>
+                        <li>divide</li>
+                </ul>
+                <h1 id="section5">Model layers</h1>
+                <p>Linear(Trainable)</p>
+                <code>Linear* myLinear = new Linear(inputSize,neurons);</code>
+                <p>Normalize(Non Trainable)</p>
+                <code>Normalize* myNormalize = new Normalize(inputSize);</code>
+                <p>Flatten(Non Trainable)</p>
+                <code>Flatten* myFlatten = new Flatten(inputSize);</code>
+
+                <h1 id="section6">Activation functions</h1>
+                <p>Relu - Types: "relu","leaky"</p>
+                <code>Relu* myRelu = new Relu(inputSize,type);</code>
+
+                <p>Softmax - Types: "softmax","softmax2d"</p>
+                <code>Softmax* mySoftmax = new Softmax(inputSize,type);</code>
+
+                <h1 id="section7">Loss functions</h1>
+
+                <p>MSE Loss</p>
+                <pre>
+<code>
+MSELoss loss_fn = MSELoss();
+loss_fn.loss(a,b);
+</code>
+                </pre>
+                <p>MAELoss</p>
+                <pre>
+<code>
+MAELoss loss_fn = MAELoss();
+loss_fn.loss(a,b);
+</code>
+                </pre>
+                <p>Cross Entropy Loss</p>
+                <pre>
+<code>
+CrossEntropyLoss loss_fn = CrossEntropyLoss();
+loss_fn.loss(a,b);
+</code>
+                </pre>
+
+                <h1 id="section8">Optimizers</h1>
+                <p>SGD</p>
+                <code>SGD optimizer = SGD(alpha,weight_decay);</code>
+
+                <p>RMSProp</p>
+                <code>RMSProp optimizer = RMSProp(alpha,weight_decay,epsilon)</code>
+
+                <p>Adam</p>
+                <code>Adam optimizer = Adam(alpha,beta1,beta2,epsilon);</code>
+
+                <h1 id="section9">Pipeline</h1>
+                <p>Constructor</p>
+                <code>Pipeline myPipeline = Pipeline();</code>
+
+                <p>Add layers and activations to pipeline</p>
+                <pre>
+<code>
+Linear* myLinear = new Linear(make_pair(2,2),6);
+Relu* relu = new Relu(make_pair(2,6));
+
+myPipeline.add(myLinear);
+myPipeline.add(myRelu);
+</code>
+                </pre>
+                <p>NOTE: Trainable layers must always be followed by an activation function</p>
+
+                <p>Forward pass</p>
+                <code>Tensor&ltfloat&gt output_pred = myPipeline.forward(inputTensor);</code>
+
+                <p>Backward pass</p>
+                <code>myPipeline.backward(&optimizer,&loss_fn,output_pred)</code>
+
+                <h1 id="python">Python API Documentation</h1>
+                <h1 id="section10">Tensor</h1>
+                <p>Python list to tensor conversion is currently being worked on, sorry for the inconvenience.</p>
+
+                <P>Create a tensor with a given default value for a given size</P>
+                <code>a = FloatTensor(IntPair(2,2),0)</code>
+
+                <p>Copy from another Tensor</p>
+                <code>a = FloatTensor(IntPair(2,2),0)</code><br>
+                <code>b = Tensor(a)</code>
+
+                <p>Printing data</p>
+                <code>a = FloatTensor(IntPair(2,2),0)</code><br>
+                <code>a.printTensor()</code>
+
+                <p>Read data from a pre-processed CSV file</p>
+                <code>a = FloatTensor.readCSV(filepath)</code><br>
+                <p>Operations of Tensors</p>
+                <pre>
+            <code>
+a = FloatTensor(IntPair(2,2),5)
+b = FloatTensor(IntPair(2,2),1)
+sum = a+b;
+difference = a-b;
+product = a*b;
+</code>
+        </pre>
+                <p>Creating randomized data</p>
+                <pre>
+<code>
+a = FloatTensor.randomFloatTensor(IntPair(2,2))       
+</code>
+</pre>
+                <p>Data preprocessing (Minimal functionality)</p>
+                <p>Normalizing data column wise</p>
+                <pre>
+<code>
+a = FloatTensor.randomFloatTensor(IntPair(2,2))       
+a = a.Normalize()
+</code>
+</pre>
+                <p>Flatten Tensor to 1D</p>
+                <pre>
+<code>
+a = FloatTensor.randomFloatTensor(IntPair(2,2))       
+a = a.flatten();
+</code>
+</pre>
+                <p>Reshape to desired size</p>
+                <pre>
+<code>
+a = FloatTensor.randomFloatTensor(IntPair(2,2))       
+a = a.reshape(IntPair(4,1))
+</code>
+</pre>
+                <p>Splitting each row of a Tensor into a new Tensor</p>
+                <pre>
+<code>
+a = FloatTensor.randomFloatTensor(IntPair(2,2))       
+a_list = a.row_split();
+</code>
+</pre>
+                <p>Split input and output based on indices</p>
+                <pre>
+<code>
+ind = [1]
+a = FloatTensor.randomFloatTensor(IntPair(2,2))       
+input,output = a.input_output.split(ind)
+</code>
+</pre>
+                <p>Transpose Tensor in place</p>
+                <pre>
+<code>
+a = FloatTensor.randomFloatTensor(IntPair(2,2))       
+a.transpose()
+</code>
+</pre>
+                <p>Matrix operation functions</p>
+                <pre>
+<code>
+a = FloatTensor(IntPair(2,2),5)
+b = FloatTensor(IntPair(2,2),1)
+
+a = a.multiply(b)
+</code>
+</pre>
+                <p>All the following operations work in the same way as the previous example.</p>
+                <ul>
+                        <li>OMPmultiply</li>
+                        <li>elem_multiply</li>
+                        <li>scalarMultiply</li>
+                        <li>add</li>
+                        <li>scalarAdd</li>
+                        <li>divide</li>
+                </ul>
+                <h1 id="section11">Model layers</h1>
+                <p>Linear(Trainable)</p>
+                <code>myLinear = Linear(inputSize,neurons)</code>
+                <p>Normalize(Non Trainable)</p>
+                <code>myNormalize = Normalize(inputSize)</code>
+                <p>Flatten(Non Trainable)</p>
+                <code>myFlatten = Flatten(inputSize)</code>
+
+                <h1 id="section12">Activation functions</h1>
+                <p>Relu - Types: "relu","leaky"</p>
+                <code>myRelu = Relu(inputSize,type)</code>
+
+                <p>Softmax - Types: "softmax","softmax2d"</p>
+                <code>mySoftmax = Softmax(inputSize,type)</code>
+                <h1 id="section13">Loss functions</h1>
+
+                <p>MSE Loss</p>
+                <pre>
+<code>
+loss_fn = MSELoss()
+loss_fn.loss(a,b)
+</code>
+                </pre>
+                <p>MAELoss</p>
+                <pre>
+<code>
+loss_fn = MAELoss()
+loss_fn.loss(a,b)
+</code>
+                </pre>
+                <p>Cross Entropy Loss</p>
+                <pre>
+<code>
+loss_fn = CrossEntropyLoss()
+loss_fn.loss(a,b)
+</code>
+                </pre>
+
+                <h1 id="section14">Optimizers</h1>
+                <p>SGD</p>
+                <code>optimizer = SGD(alpha,weight_decay)</code>
+
+                <p>RMSProp</p>
+                <code>optimizer = RMSProp(alpha,weight_decay,epsilon)</code>
+
+                <p>Adam</p>
+                <code>optimizer = Adam(alpha,beta1,beta2,epsilon)</code>
+
+                <h1 id="section15">Pipeline</h1>
+                <p>Constructor</p>
+                <code>myPipeline = Pipeline()</code>
+
+                <p>Add layers and activations to pipeline</p>
+                <pre>
+<code>
+myLinear = Linear(IntPair(2,2),6)
+relu = Relu(IntPair(2,6))
+
+myPipeline.add(myLinear)
+myPipeline.add(myRelu)
+</code>
+                </pre>
+                <p>NOTE: Trainable layers must always be followed by an activation function</p>
+
+                <p>Forward pass</p>
+                <code>output_pred = myPipeline.forward(inputTensor)</code>
+
+                <p>Backward pass</p>
+                <code>myPipeline.backward(optimizer,loss_fn,output_pred)</code>
+        </div>
 
 
 </body>
