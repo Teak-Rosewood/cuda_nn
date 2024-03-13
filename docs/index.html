@@ -63,10 +63,112 @@
 
         <h1 id="section4">Tensor</h1>
         <p>Constructor definitions - C++</p>
+        <p>2D array -> Tensor</p>
         <code>Tensor(T**,std::pair &ltint,int&gt);</code>
-        <p>T** - 2D array, dynamically allocated</p>
-        <p>std::pair &ltint,int&gt - size of the 2d array</p>
+
+        <p>Copy from another Tensor</p>
+        <code>Tensor(const Tensor& other);</code>
+
+        <P>Create a tensor with a given default value for a given size</P>
+        <code>Tensor(pair<int,int>,T);</code>
+
+        <p>Printing data</p>
+        <code>Tensor &ltint&gt a = Tensor &ltint&gt (make_pair(2,2),2);</code><br>
+        <code>a.printTensor();</code>
+        <p>Operations of Tensors</p>
+        <pre>
+            <code>
+Tensor &ltint&gt a = Tensor &ltint&gt (std::make_pair(2,2),5);
+Tensor &ltint&gt b = Tensor &ltint&gt (std::make_pair(2,2),1);
+
+Tensor &ltint&gt sum = a+b;
+Tensor &ltint&gt difference = a-b;
+Tensor &ltint&gt product = a*b;
+</code>
+        </pre>
+
+        <p>Converting to float tensors (Useful when using pipelines)</p>
+        <pre>
+<code>
+Tensor &ltint&gt a = Tensor &ltint&gt (std::make_pair(2,2),5);
+Tensor &ltfloat&gt b = a.convertFloat();
+</code>
+        </pre>
+        <p>Creating randomized data</p>
+        <pre>
+Tensor &ltint&gt a = Tensor &ltint&gt randomTensor(make_pair(2,2));
+Tensor &ltint&gt b = Tensor &ltint&gt randomTensor(std::make_pair(2,2),10,20); // Random values with minimum of 10 and maximum of 20
+Tensor &ltfloat&gt c = Tensor &ltfloat&gt randomFloatTensor(make_pair(2,2));
+</pre>
+        <p>Data preprocessing (Minimal functionality)</p>
+        <p>Normalizing data column wise</p>
+        <pre>
+<code>
+Tensor &ltfloat&gt a = Tensor &ltfloat&gt randomFloatTensor(make_pair(2,2));
+a = a.Normalize();
+</code>
+</pre>
+        <p>Flatten Tensor to 1D</p>
+        <pre>
+<code>
+Tensor &ltfloat&gt a = Tensor &ltfloat&gt randomFloatTensor(make_pair(2,2));
+a = a.flatten();
+</code>
+        </pre>
+        <p>Reshape to desired size</p>
+        <pre>
+<code>
+Tensor &ltfloat&gt a = Tensor &ltfloat&gt randomFloatTensor(make_pair(2,2));
+a = a.reshape(make_pair(4,1));
+</code>
+        </pre>
+        <p>Splitting each row of a Tensor into a new Tensor</p>
+        <pre>
+<code>
+Tensor &ltfloat&gt a = Tensor &ltfloat&gt randomFloatTensor(make_pair(2,2));
+vector&ltTensor&ltfloat&gt&gt a_list = a.row_split();
+</code>
+        </pre>
+        <p>Split input and output based on indices</p>
+        <pre>
+<code>
+vector&ltint&gt indices;
+indices.push_back(1); // Push back as many column indices are required outputs
+Tensor &ltfloat&gt a = Tensor &ltfloat&gt randomFloatTensor(make_pair(2,2));
+pair &ltTensor&ltfloat&gt,&ltTensor&ltfloat&gt&gt pair_tensor = a.input_output_split(ind);
+</code>
+        </pre>
+        <p>Transpose Tensor in place</p>
+        <pre>
+<code>
+Tensor &ltfloat&gt a = Tensor &ltfloat&gt randomFloatTensor(make_pair(2,2));
+a.transpose();
+</code>
+        </pre>
+        <p>Matrix operation functions</p>
+        <pre>
+<code>
+Tensor &ltint&gt a = Tensor &ltint&gt (std::make_pair(2,2),5);
+Tensor &ltint&gt b = Tensor &ltint&gt (std::make_pair(2,2),1);
+
+a = a.multiply(b);
+</code>
+        </pre>
+        <p>All the following operations work in the same way as the previous example.</p>
+        <ul>
+            <li>OMPmultiply</li>
+            <li>elem_multiply</li>
+            <li>scalarMultiply</li>
+            <li>add</li>
+            <li>scalarAdd</li>
+            <li>divide</li>
+        </ul>
+        <h1 id="section5">Model layers</h1>
+        <p>Linear</p>
+        <p>Trainable layer</p>
     </div>
+
+
 </body>
 
 </html>
