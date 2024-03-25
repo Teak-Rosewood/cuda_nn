@@ -49,4 +49,4 @@ doc/
 # Ignore logs and databases
 *.log
 *.sqlite
-*/__pycache__/
+__pycache__/
