@@ -122,6 +122,36 @@ class SwigPyIterator(object):
 # Register SwigPyIterator in _arachne_nn:
 _arachne_nn.SwigPyIterator_swigregister(SwigPyIterator)
 
+
+def CUDAscalarMultiplyFloat(device_data, multiplicand, device_data_multiplied, size):
+    return _arachne_nn.CUDAscalarMultiplyFloat(device_data, multiplicand, device_data_multiplied, size)
+
+def CUDAMultiplyFloat(device_data_a, device_data_b, device_data_multiplied, size_a, size_b):
+    return _arachne_nn.CUDAMultiplyFloat(device_data_a, device_data_b, device_data_multiplied, size_a, size_b)
+
+def CUDAscalarAddFloat(device_data, to_add, device_data_added, size):
+    return _arachne_nn.CUDAscalarAddFloat(device_data, to_add, device_data_added, size)
+
+def CUDAdivideFloat(device_data_a, device_data_b, device_data_divided, size):
+    return _arachne_nn.CUDAdivideFloat(device_data_a, device_data_b, device_data_divided, size)
+
+def CUDAaddFloat(device_data_a, device_data_b, device_data_added, size):
+    return _arachne_nn.CUDAaddFloat(device_data_a, device_data_b, device_data_added, size)
+
+def CUDAelemMultiplyFloat(device_data_a, device_data_b, device_data_multiplied, size):
+    return _arachne_nn.CUDAelemMultiplyFloat(device_data_a, device_data_b, device_data_multiplied, size)
+
+def CUDAflattenFloat(device_data, device_data_flattened, size):
+    return _arachne_nn.CUDAflattenFloat(device_data, device_data_flattened, size)
+
+def CUDAreshapeFloat(device_data, device_data_reshaped, oldSize, newSize):
+    return _arachne_nn.CUDAreshapeFloat(device_data, device_data_reshaped, oldSize, newSize)
+
+def CUDAconvertFloatFloat(device_data, device_data_float, size):
+    return _arachne_nn.CUDAconvertFloatFloat(device_data, device_data_float, size)
+
+def CUDAsqrtFloat(device_data, device_data_sqrt, size):
+    return _arachne_nn.CUDAsqrtFloat(device_data, device_data_sqrt, size)
 class IntVector(object):
     thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc="The membership flag")
     __repr__ = _swig_repr
@@ -395,6 +425,12 @@ class FloatTensor(object):
     def randomFloatTensor(arg1):
         return _arachne_nn.FloatTensor_randomFloatTensor(arg1)
 
+    def moveToDevice(self):
+        return _arachne_nn.FloatTensor_moveToDevice(self)
+
+    def moveToHost(self):
+        return _arachne_nn.FloatTensor_moveToHost(self)
+
     def row_split(self):
         return _arachne_nn.FloatTensor_row_split(self)
 
@@ -444,6 +480,8 @@ class FloatTensor(object):
     def printTensor(self):
         return _arachne_nn.FloatTensor_printTensor(self)
     data = property(_arachne_nn.FloatTensor_data_get, _arachne_nn.FloatTensor_data_set)
+    device_data = property(_arachne_nn.FloatTensor_device_data_get, _arachne_nn.FloatTensor_device_data_set)
+    device_count = property(_arachne_nn.FloatTensor_device_count_get, _arachne_nn.FloatTensor_device_count_set)
     size = property(_arachne_nn.FloatTensor_size_get, _arachne_nn.FloatTensor_size_set)
 
 # Register FloatTensor in _arachne_nn:

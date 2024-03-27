@@ -2717,19 +2717,20 @@ SWIGINTERN PyObject *SWIG_PyStaticMethod_New(PyObject *SWIGUNUSEDPARM(self), PyO
 #define SWIGTYPE_p_first_type swig_types[22]
 #define SWIGTYPE_p_p_PyObject swig_types[23]
 #define SWIGTYPE_p_p_float swig_types[24]
-#define SWIGTYPE_p_second_type swig_types[25]
-#define SWIGTYPE_p_size_type swig_types[26]
-#define SWIGTYPE_p_std__allocatorT_TensorT_float_t_t swig_types[27]
-#define SWIGTYPE_p_std__allocatorT_int_t swig_types[28]
-#define SWIGTYPE_p_std__invalid_argument swig_types[29]
-#define SWIGTYPE_p_std__pairT_TensorT_float_t_TensorT_float_t_t swig_types[30]
-#define SWIGTYPE_p_std__pairT_int_int_t swig_types[31]
-#define SWIGTYPE_p_std__vectorT_TensorT_float_t_std__allocatorT_TensorT_float_t_t_t swig_types[32]
-#define SWIGTYPE_p_std__vectorT_int_std__allocatorT_int_t_t swig_types[33]
-#define SWIGTYPE_p_swig__SwigPyIterator swig_types[34]
-#define SWIGTYPE_p_value_type swig_types[35]
-static swig_type_info *swig_types[37];
-static swig_module_info swig_module = {swig_types, 36, 0, 0, 0, 0};
+#define SWIGTYPE_p_p_p_float swig_types[25]
+#define SWIGTYPE_p_second_type swig_types[26]
+#define SWIGTYPE_p_size_type swig_types[27]
+#define SWIGTYPE_p_std__allocatorT_TensorT_float_t_t swig_types[28]
+#define SWIGTYPE_p_std__allocatorT_int_t swig_types[29]
+#define SWIGTYPE_p_std__invalid_argument swig_types[30]
+#define SWIGTYPE_p_std__pairT_TensorT_float_t_TensorT_float_t_t swig_types[31]
+#define SWIGTYPE_p_std__pairT_int_int_t swig_types[32]
+#define SWIGTYPE_p_std__vectorT_TensorT_float_t_std__allocatorT_TensorT_float_t_t_t swig_types[33]
+#define SWIGTYPE_p_std__vectorT_int_std__allocatorT_int_t_t swig_types[34]
+#define SWIGTYPE_p_swig__SwigPyIterator swig_types[35]
+#define SWIGTYPE_p_value_type swig_types[36]
+static swig_type_info *swig_types[38];
+static swig_module_info swig_module = {swig_types, 37, 0, 0, 0, 0};
 #define SWIG_TypeQuery(name) SWIG_TypeQueryModule(&swig_module, &swig_module, name)
 #define SWIG_MangledTypeQuery(name) SWIG_MangledTypeQueryModule(&swig_module, &swig_module, name)
 
@@ -2833,6 +2834,9 @@ namespace swig {
 }
 
 
+#include <utility>
+#include <cuda_runtime.h>
+#include "kernels/kernels.hpp"
 #include "Tensor.hpp"
 #include "Model.hpp"
 #include "Activation.hpp"
@@ -3362,6 +3366,66 @@ SWIG_AsVal_ptrdiff_t (PyObject * obj, ptrdiff_t *val)
 
 
 #include <utility>
+
+
+/* Getting isfinite working pre C99 across multiple platforms is non-trivial. Users can provide SWIG_isfinite on older platforms. */
+#ifndef SWIG_isfinite
+/* isfinite() is a macro for C99 */
+# if defined(isfinite)
+#  define SWIG_isfinite(X) (isfinite(X))
+# elif defined(__cplusplus) && __cplusplus >= 201103L
+/* Use a template so that this works whether isfinite() is std::isfinite() or
+ * in the global namespace.  The reality seems to vary between compiler
+ * versions.
+ *
+ * Make sure namespace std exists to avoid compiler warnings.
+ *
+ * extern "C++" is required as this fragment can end up inside an extern "C" { } block
+ */
+namespace std { }
+extern "C++" template<typename T>
+inline int SWIG_isfinite_func(T x) {
+  using namespace std;
+  return isfinite(x);
+}
+#  define SWIG_isfinite(X) (SWIG_isfinite_func(X))
+# elif defined(__GNUC__) && (__GNUC__ > 4 || (__GNUC__ == 4 && __GNUC_MINOR__ >= 2))
+#  define SWIG_isfinite(X) (__builtin_isfinite(X))
+# elif defined(__clang__) && defined(__has_builtin)
+#  if __has_builtin(__builtin_isfinite)
+#   define SWIG_isfinite(X) (__builtin_isfinite(X))
+#  endif
+# elif defined(_MSC_VER)
+#  define SWIG_isfinite(X) (_finite(X))
+# elif defined(__sun) && defined(__SVR4)
+#  include <ieeefp.h>
+#  define SWIG_isfinite(X) (finite(X))
+# endif
+#endif
+
+
+/* Accept infinite as a valid float value unless we are unable to check if a value is finite */
+#ifdef SWIG_isfinite
+# define SWIG_Float_Overflow_Check(X) ((X < -FLT_MAX || X > FLT_MAX) && SWIG_isfinite(X))
+#else
+# define SWIG_Float_Overflow_Check(X) ((X < -FLT_MAX || X > FLT_MAX))
+#endif
+
+
+SWIGINTERN int
+SWIG_AsVal_float (PyObject * obj, float *val)
+{
+  double v;
+  int res = SWIG_AsVal_double (obj, &v);
+  if (SWIG_IsOK(res)) {
+    if (SWIG_Float_Overflow_Check(v)) {
+      return SWIG_OverflowError;
+    } else {
+      if (val) *val = static_cast< float >(v);
+    }
+  }  
+  return res;
+}
 
 
 namespace swig {
@@ -4875,66 +4939,6 @@ SWIGINTERN std::vector< Tensor< float > >::iterator std_vector_Sl_Tensor_Sl_floa
 SWIGINTERN std::vector< Tensor< float > >::iterator std_vector_Sl_Tensor_Sl_float_Sg__Sg__insert__SWIG_0(std::vector< Tensor< float > > *self,std::vector< Tensor< float > >::iterator pos,std::vector< Tensor< float > >::value_type const &x){ return self->insert(pos, x); }
 SWIGINTERN void std_vector_Sl_Tensor_Sl_float_Sg__Sg__insert__SWIG_1(std::vector< Tensor< float > > *self,std::vector< Tensor< float > >::iterator pos,std::vector< Tensor< float > >::size_type n,std::vector< Tensor< float > >::value_type const &x){ self->insert(pos, n, x); }
 
-/* Getting isfinite working pre C99 across multiple platforms is non-trivial. Users can provide SWIG_isfinite on older platforms. */
-#ifndef SWIG_isfinite
-/* isfinite() is a macro for C99 */
-# if defined(isfinite)
-#  define SWIG_isfinite(X) (isfinite(X))
-# elif defined(__cplusplus) && __cplusplus >= 201103L
-/* Use a template so that this works whether isfinite() is std::isfinite() or
- * in the global namespace.  The reality seems to vary between compiler
- * versions.
- *
- * Make sure namespace std exists to avoid compiler warnings.
- *
- * extern "C++" is required as this fragment can end up inside an extern "C" { } block
- */
-namespace std { }
-extern "C++" template<typename T>
-inline int SWIG_isfinite_func(T x) {
-  using namespace std;
-  return isfinite(x);
-}
-#  define SWIG_isfinite(X) (SWIG_isfinite_func(X))
-# elif defined(__GNUC__) && (__GNUC__ > 4 || (__GNUC__ == 4 && __GNUC_MINOR__ >= 2))
-#  define SWIG_isfinite(X) (__builtin_isfinite(X))
-# elif defined(__clang__) && defined(__has_builtin)
-#  if __has_builtin(__builtin_isfinite)
-#   define SWIG_isfinite(X) (__builtin_isfinite(X))
-#  endif
-# elif defined(_MSC_VER)
-#  define SWIG_isfinite(X) (_finite(X))
-# elif defined(__sun) && defined(__SVR4)
-#  include <ieeefp.h>
-#  define SWIG_isfinite(X) (finite(X))
-# endif
-#endif
-
-
-/* Accept infinite as a valid float value unless we are unable to check if a value is finite */
-#ifdef SWIG_isfinite
-# define SWIG_Float_Overflow_Check(X) ((X < -FLT_MAX || X > FLT_MAX) && SWIG_isfinite(X))
-#else
-# define SWIG_Float_Overflow_Check(X) ((X < -FLT_MAX || X > FLT_MAX))
-#endif
-
-
-SWIGINTERN int
-SWIG_AsVal_float (PyObject * obj, float *val)
-{
-  double v;
-  int res = SWIG_AsVal_double (obj, &v);
-  if (SWIG_IsOK(res)) {
-    if (SWIG_Float_Overflow_Check(v)) {
-      return SWIG_OverflowError;
-    } else {
-      if (val) *val = static_cast< float >(v);
-    }
-  }  
-  return res;
-}
-
-
 SWIGINTERN swig_type_info*
 SWIG_pchar_descriptor(void)
 {
@@ -6129,6 +6133,566 @@ SWIGINTERN PyObject *SwigPyIterator_swigregister(PyObject *SWIGUNUSEDPARM(self),
   SWIG_TypeNewClientData(SWIGTYPE_p_swig__SwigPyIterator, SWIG_NewClientData(obj));
   return SWIG_Py_Void();
 }
+
+SWIGINTERN PyObject *_wrap_CUDAscalarMultiplyFloat(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  float **arg1 = (float **) 0 ;
+  float arg2 ;
+  float ***arg3 = 0 ;
+  std::pair< int,int > arg4 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  float val2 ;
+  int ecode2 = 0 ;
+  void *argp3 = 0 ;
+  int res3 = 0 ;
+  void *argp4 ;
+  int res4 = 0 ;
+  PyObject *swig_obj[4] ;
+  
+  if (!SWIG_Python_UnpackTuple(args, "CUDAscalarMultiplyFloat", 4, 4, swig_obj)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_p_float, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "CUDAscalarMultiplyFloat" "', argument " "1"" of type '" "float **""'"); 
+  }
+  arg1 = reinterpret_cast< float ** >(argp1);
+  ecode2 = SWIG_AsVal_float(swig_obj[1], &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "CUDAscalarMultiplyFloat" "', argument " "2"" of type '" "float""'");
+  } 
+  arg2 = static_cast< float >(val2);
+  res3 = SWIG_ConvertPtr(swig_obj[2], &argp3, SWIGTYPE_p_p_p_float,  0 );
+  if (!SWIG_IsOK(res3)) {
+    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "CUDAscalarMultiplyFloat" "', argument " "3"" of type '" "float **&""'"); 
+  }
+  if (!argp3) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "CUDAscalarMultiplyFloat" "', argument " "3"" of type '" "float **&""'"); 
+  }
+  arg3 = reinterpret_cast< float *** >(argp3);
+  {
+    res4 = SWIG_ConvertPtr(swig_obj[3], &argp4, SWIGTYPE_p_std__pairT_int_int_t,  0  | 0);
+    if (!SWIG_IsOK(res4)) {
+      SWIG_exception_fail(SWIG_ArgError(res4), "in method '" "CUDAscalarMultiplyFloat" "', argument " "4"" of type '" "std::pair< int,int >""'"); 
+    }  
+    if (!argp4) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "CUDAscalarMultiplyFloat" "', argument " "4"" of type '" "std::pair< int,int >""'");
+    } else {
+      std::pair< int,int > * temp = reinterpret_cast< std::pair< int,int > * >(argp4);
+      arg4 = *temp;
+      if (SWIG_IsNewObj(res4)) delete temp;
+    }
+  }
+  CUDAscalarMultiply< float >(arg1,arg2,*arg3,arg4);
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_CUDAMultiplyFloat(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  float **arg1 = (float **) 0 ;
+  float **arg2 = (float **) 0 ;
+  float ***arg3 = 0 ;
+  std::pair< int,int > arg4 ;
+  std::pair< int,int > arg5 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  void *argp3 = 0 ;
+  int res3 = 0 ;
+  void *argp4 ;
+  int res4 = 0 ;
+  void *argp5 ;
+  int res5 = 0 ;
+  PyObject *swig_obj[5] ;
+  
+  if (!SWIG_Python_UnpackTuple(args, "CUDAMultiplyFloat", 5, 5, swig_obj)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_p_float, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "CUDAMultiplyFloat" "', argument " "1"" of type '" "float **""'"); 
+  }
+  arg1 = reinterpret_cast< float ** >(argp1);
+  res2 = SWIG_ConvertPtr(swig_obj[1], &argp2,SWIGTYPE_p_p_float, 0 |  0 );
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "CUDAMultiplyFloat" "', argument " "2"" of type '" "float **""'"); 
+  }
+  arg2 = reinterpret_cast< float ** >(argp2);
+  res3 = SWIG_ConvertPtr(swig_obj[2], &argp3, SWIGTYPE_p_p_p_float,  0 );
+  if (!SWIG_IsOK(res3)) {
+    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "CUDAMultiplyFloat" "', argument " "3"" of type '" "float **&""'"); 
+  }
+  if (!argp3) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "CUDAMultiplyFloat" "', argument " "3"" of type '" "float **&""'"); 
+  }
+  arg3 = reinterpret_cast< float *** >(argp3);
+  {
+    res4 = SWIG_ConvertPtr(swig_obj[3], &argp4, SWIGTYPE_p_std__pairT_int_int_t,  0  | 0);
+    if (!SWIG_IsOK(res4)) {
+      SWIG_exception_fail(SWIG_ArgError(res4), "in method '" "CUDAMultiplyFloat" "', argument " "4"" of type '" "std::pair< int,int >""'"); 
+    }  
+    if (!argp4) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "CUDAMultiplyFloat" "', argument " "4"" of type '" "std::pair< int,int >""'");
+    } else {
+      std::pair< int,int > * temp = reinterpret_cast< std::pair< int,int > * >(argp4);
+      arg4 = *temp;
+      if (SWIG_IsNewObj(res4)) delete temp;
+    }
+  }
+  {
+    res5 = SWIG_ConvertPtr(swig_obj[4], &argp5, SWIGTYPE_p_std__pairT_int_int_t,  0  | 0);
+    if (!SWIG_IsOK(res5)) {
+      SWIG_exception_fail(SWIG_ArgError(res5), "in method '" "CUDAMultiplyFloat" "', argument " "5"" of type '" "std::pair< int,int >""'"); 
+    }  
+    if (!argp5) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "CUDAMultiplyFloat" "', argument " "5"" of type '" "std::pair< int,int >""'");
+    } else {
+      std::pair< int,int > * temp = reinterpret_cast< std::pair< int,int > * >(argp5);
+      arg5 = *temp;
+      if (SWIG_IsNewObj(res5)) delete temp;
+    }
+  }
+  CUDAMultiply< float >(arg1,arg2,*arg3,arg4,arg5);
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_CUDAscalarAddFloat(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  float **arg1 = (float **) 0 ;
+  float arg2 ;
+  float ***arg3 = 0 ;
+  std::pair< int,int > arg4 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  float val2 ;
+  int ecode2 = 0 ;
+  void *argp3 = 0 ;
+  int res3 = 0 ;
+  void *argp4 ;
+  int res4 = 0 ;
+  PyObject *swig_obj[4] ;
+  
+  if (!SWIG_Python_UnpackTuple(args, "CUDAscalarAddFloat", 4, 4, swig_obj)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_p_float, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "CUDAscalarAddFloat" "', argument " "1"" of type '" "float **""'"); 
+  }
+  arg1 = reinterpret_cast< float ** >(argp1);
+  ecode2 = SWIG_AsVal_float(swig_obj[1], &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "CUDAscalarAddFloat" "', argument " "2"" of type '" "float""'");
+  } 
+  arg2 = static_cast< float >(val2);
+  res3 = SWIG_ConvertPtr(swig_obj[2], &argp3, SWIGTYPE_p_p_p_float,  0 );
+  if (!SWIG_IsOK(res3)) {
+    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "CUDAscalarAddFloat" "', argument " "3"" of type '" "float **&""'"); 
+  }
+  if (!argp3) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "CUDAscalarAddFloat" "', argument " "3"" of type '" "float **&""'"); 
+  }
+  arg3 = reinterpret_cast< float *** >(argp3);
+  {
+    res4 = SWIG_ConvertPtr(swig_obj[3], &argp4, SWIGTYPE_p_std__pairT_int_int_t,  0  | 0);
+    if (!SWIG_IsOK(res4)) {
+      SWIG_exception_fail(SWIG_ArgError(res4), "in method '" "CUDAscalarAddFloat" "', argument " "4"" of type '" "std::pair< int,int >""'"); 
+    }  
+    if (!argp4) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "CUDAscalarAddFloat" "', argument " "4"" of type '" "std::pair< int,int >""'");
+    } else {
+      std::pair< int,int > * temp = reinterpret_cast< std::pair< int,int > * >(argp4);
+      arg4 = *temp;
+      if (SWIG_IsNewObj(res4)) delete temp;
+    }
+  }
+  CUDAscalarAdd< float >(arg1,arg2,*arg3,arg4);
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_CUDAdivideFloat(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  float **arg1 = (float **) 0 ;
+  float **arg2 = (float **) 0 ;
+  float ***arg3 = 0 ;
+  std::pair< int,int > arg4 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  void *argp3 = 0 ;
+  int res3 = 0 ;
+  void *argp4 ;
+  int res4 = 0 ;
+  PyObject *swig_obj[4] ;
+  
+  if (!SWIG_Python_UnpackTuple(args, "CUDAdivideFloat", 4, 4, swig_obj)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_p_float, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "CUDAdivideFloat" "', argument " "1"" of type '" "float **""'"); 
+  }
+  arg1 = reinterpret_cast< float ** >(argp1);
+  res2 = SWIG_ConvertPtr(swig_obj[1], &argp2,SWIGTYPE_p_p_float, 0 |  0 );
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "CUDAdivideFloat" "', argument " "2"" of type '" "float **""'"); 
+  }
+  arg2 = reinterpret_cast< float ** >(argp2);
+  res3 = SWIG_ConvertPtr(swig_obj[2], &argp3, SWIGTYPE_p_p_p_float,  0 );
+  if (!SWIG_IsOK(res3)) {
+    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "CUDAdivideFloat" "', argument " "3"" of type '" "float **&""'"); 
+  }
+  if (!argp3) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "CUDAdivideFloat" "', argument " "3"" of type '" "float **&""'"); 
+  }
+  arg3 = reinterpret_cast< float *** >(argp3);
+  {
+    res4 = SWIG_ConvertPtr(swig_obj[3], &argp4, SWIGTYPE_p_std__pairT_int_int_t,  0  | 0);
+    if (!SWIG_IsOK(res4)) {
+      SWIG_exception_fail(SWIG_ArgError(res4), "in method '" "CUDAdivideFloat" "', argument " "4"" of type '" "std::pair< int,int >""'"); 
+    }  
+    if (!argp4) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "CUDAdivideFloat" "', argument " "4"" of type '" "std::pair< int,int >""'");
+    } else {
+      std::pair< int,int > * temp = reinterpret_cast< std::pair< int,int > * >(argp4);
+      arg4 = *temp;
+      if (SWIG_IsNewObj(res4)) delete temp;
+    }
+  }
+  CUDAdivide< float >(arg1,arg2,*arg3,arg4);
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_CUDAaddFloat(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  float **arg1 = (float **) 0 ;
+  float **arg2 = (float **) 0 ;
+  float ***arg3 = 0 ;
+  std::pair< int,int > arg4 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  void *argp3 = 0 ;
+  int res3 = 0 ;
+  void *argp4 ;
+  int res4 = 0 ;
+  PyObject *swig_obj[4] ;
+  
+  if (!SWIG_Python_UnpackTuple(args, "CUDAaddFloat", 4, 4, swig_obj)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_p_float, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "CUDAaddFloat" "', argument " "1"" of type '" "float **""'"); 
+  }
+  arg1 = reinterpret_cast< float ** >(argp1);
+  res2 = SWIG_ConvertPtr(swig_obj[1], &argp2,SWIGTYPE_p_p_float, 0 |  0 );
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "CUDAaddFloat" "', argument " "2"" of type '" "float **""'"); 
+  }
+  arg2 = reinterpret_cast< float ** >(argp2);
+  res3 = SWIG_ConvertPtr(swig_obj[2], &argp3, SWIGTYPE_p_p_p_float,  0 );
+  if (!SWIG_IsOK(res3)) {
+    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "CUDAaddFloat" "', argument " "3"" of type '" "float **&""'"); 
+  }
+  if (!argp3) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "CUDAaddFloat" "', argument " "3"" of type '" "float **&""'"); 
+  }
+  arg3 = reinterpret_cast< float *** >(argp3);
+  {
+    res4 = SWIG_ConvertPtr(swig_obj[3], &argp4, SWIGTYPE_p_std__pairT_int_int_t,  0  | 0);
+    if (!SWIG_IsOK(res4)) {
+      SWIG_exception_fail(SWIG_ArgError(res4), "in method '" "CUDAaddFloat" "', argument " "4"" of type '" "std::pair< int,int >""'"); 
+    }  
+    if (!argp4) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "CUDAaddFloat" "', argument " "4"" of type '" "std::pair< int,int >""'");
+    } else {
+      std::pair< int,int > * temp = reinterpret_cast< std::pair< int,int > * >(argp4);
+      arg4 = *temp;
+      if (SWIG_IsNewObj(res4)) delete temp;
+    }
+  }
+  CUDAadd< float >(arg1,arg2,*arg3,arg4);
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_CUDAelemMultiplyFloat(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  float **arg1 = (float **) 0 ;
+  float **arg2 = (float **) 0 ;
+  float ***arg3 = 0 ;
+  std::pair< int,int > arg4 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  void *argp3 = 0 ;
+  int res3 = 0 ;
+  void *argp4 ;
+  int res4 = 0 ;
+  PyObject *swig_obj[4] ;
+  
+  if (!SWIG_Python_UnpackTuple(args, "CUDAelemMultiplyFloat", 4, 4, swig_obj)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_p_float, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "CUDAelemMultiplyFloat" "', argument " "1"" of type '" "float **""'"); 
+  }
+  arg1 = reinterpret_cast< float ** >(argp1);
+  res2 = SWIG_ConvertPtr(swig_obj[1], &argp2,SWIGTYPE_p_p_float, 0 |  0 );
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "CUDAelemMultiplyFloat" "', argument " "2"" of type '" "float **""'"); 
+  }
+  arg2 = reinterpret_cast< float ** >(argp2);
+  res3 = SWIG_ConvertPtr(swig_obj[2], &argp3, SWIGTYPE_p_p_p_float,  0 );
+  if (!SWIG_IsOK(res3)) {
+    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "CUDAelemMultiplyFloat" "', argument " "3"" of type '" "float **&""'"); 
+  }
+  if (!argp3) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "CUDAelemMultiplyFloat" "', argument " "3"" of type '" "float **&""'"); 
+  }
+  arg3 = reinterpret_cast< float *** >(argp3);
+  {
+    res4 = SWIG_ConvertPtr(swig_obj[3], &argp4, SWIGTYPE_p_std__pairT_int_int_t,  0  | 0);
+    if (!SWIG_IsOK(res4)) {
+      SWIG_exception_fail(SWIG_ArgError(res4), "in method '" "CUDAelemMultiplyFloat" "', argument " "4"" of type '" "std::pair< int,int >""'"); 
+    }  
+    if (!argp4) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "CUDAelemMultiplyFloat" "', argument " "4"" of type '" "std::pair< int,int >""'");
+    } else {
+      std::pair< int,int > * temp = reinterpret_cast< std::pair< int,int > * >(argp4);
+      arg4 = *temp;
+      if (SWIG_IsNewObj(res4)) delete temp;
+    }
+  }
+  CUDAelemMultiply< float >(arg1,arg2,*arg3,arg4);
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_CUDAflattenFloat(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  float **arg1 = (float **) 0 ;
+  float **arg2 = 0 ;
+  std::pair< int,int > arg3 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  void *argp3 ;
+  int res3 = 0 ;
+  PyObject *swig_obj[3] ;
+  
+  if (!SWIG_Python_UnpackTuple(args, "CUDAflattenFloat", 3, 3, swig_obj)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_p_float, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "CUDAflattenFloat" "', argument " "1"" of type '" "float **""'"); 
+  }
+  arg1 = reinterpret_cast< float ** >(argp1);
+  res2 = SWIG_ConvertPtr(swig_obj[1], &argp2, SWIGTYPE_p_p_float,  0 );
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "CUDAflattenFloat" "', argument " "2"" of type '" "float *&""'"); 
+  }
+  if (!argp2) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "CUDAflattenFloat" "', argument " "2"" of type '" "float *&""'"); 
+  }
+  arg2 = reinterpret_cast< float ** >(argp2);
+  {
+    res3 = SWIG_ConvertPtr(swig_obj[2], &argp3, SWIGTYPE_p_std__pairT_int_int_t,  0  | 0);
+    if (!SWIG_IsOK(res3)) {
+      SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "CUDAflattenFloat" "', argument " "3"" of type '" "std::pair< int,int >""'"); 
+    }  
+    if (!argp3) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "CUDAflattenFloat" "', argument " "3"" of type '" "std::pair< int,int >""'");
+    } else {
+      std::pair< int,int > * temp = reinterpret_cast< std::pair< int,int > * >(argp3);
+      arg3 = *temp;
+      if (SWIG_IsNewObj(res3)) delete temp;
+    }
+  }
+  CUDAflatten< float >(arg1,*arg2,arg3);
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_CUDAreshapeFloat(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  float **arg1 = (float **) 0 ;
+  float ***arg2 = 0 ;
+  std::pair< int,int > arg3 ;
+  std::pair< int,int > arg4 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  void *argp3 ;
+  int res3 = 0 ;
+  void *argp4 ;
+  int res4 = 0 ;
+  PyObject *swig_obj[4] ;
+  
+  if (!SWIG_Python_UnpackTuple(args, "CUDAreshapeFloat", 4, 4, swig_obj)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_p_float, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "CUDAreshapeFloat" "', argument " "1"" of type '" "float **""'"); 
+  }
+  arg1 = reinterpret_cast< float ** >(argp1);
+  res2 = SWIG_ConvertPtr(swig_obj[1], &argp2, SWIGTYPE_p_p_p_float,  0 );
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "CUDAreshapeFloat" "', argument " "2"" of type '" "float **&""'"); 
+  }
+  if (!argp2) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "CUDAreshapeFloat" "', argument " "2"" of type '" "float **&""'"); 
+  }
+  arg2 = reinterpret_cast< float *** >(argp2);
+  {
+    res3 = SWIG_ConvertPtr(swig_obj[2], &argp3, SWIGTYPE_p_std__pairT_int_int_t,  0  | 0);
+    if (!SWIG_IsOK(res3)) {
+      SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "CUDAreshapeFloat" "', argument " "3"" of type '" "std::pair< int,int >""'"); 
+    }  
+    if (!argp3) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "CUDAreshapeFloat" "', argument " "3"" of type '" "std::pair< int,int >""'");
+    } else {
+      std::pair< int,int > * temp = reinterpret_cast< std::pair< int,int > * >(argp3);
+      arg3 = *temp;
+      if (SWIG_IsNewObj(res3)) delete temp;
+    }
+  }
+  {
+    res4 = SWIG_ConvertPtr(swig_obj[3], &argp4, SWIGTYPE_p_std__pairT_int_int_t,  0  | 0);
+    if (!SWIG_IsOK(res4)) {
+      SWIG_exception_fail(SWIG_ArgError(res4), "in method '" "CUDAreshapeFloat" "', argument " "4"" of type '" "std::pair< int,int >""'"); 
+    }  
+    if (!argp4) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "CUDAreshapeFloat" "', argument " "4"" of type '" "std::pair< int,int >""'");
+    } else {
+      std::pair< int,int > * temp = reinterpret_cast< std::pair< int,int > * >(argp4);
+      arg4 = *temp;
+      if (SWIG_IsNewObj(res4)) delete temp;
+    }
+  }
+  CUDAreshape< float >(arg1,*arg2,arg3,arg4);
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_CUDAconvertFloatFloat(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  float **arg1 = (float **) 0 ;
+  float ***arg2 = 0 ;
+  std::pair< int,int > arg3 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  void *argp3 ;
+  int res3 = 0 ;
+  PyObject *swig_obj[3] ;
+  
+  if (!SWIG_Python_UnpackTuple(args, "CUDAconvertFloatFloat", 3, 3, swig_obj)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_p_float, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "CUDAconvertFloatFloat" "', argument " "1"" of type '" "float **""'"); 
+  }
+  arg1 = reinterpret_cast< float ** >(argp1);
+  res2 = SWIG_ConvertPtr(swig_obj[1], &argp2, SWIGTYPE_p_p_p_float,  0 );
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "CUDAconvertFloatFloat" "', argument " "2"" of type '" "float **&""'"); 
+  }
+  if (!argp2) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "CUDAconvertFloatFloat" "', argument " "2"" of type '" "float **&""'"); 
+  }
+  arg2 = reinterpret_cast< float *** >(argp2);
+  {
+    res3 = SWIG_ConvertPtr(swig_obj[2], &argp3, SWIGTYPE_p_std__pairT_int_int_t,  0  | 0);
+    if (!SWIG_IsOK(res3)) {
+      SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "CUDAconvertFloatFloat" "', argument " "3"" of type '" "std::pair< int,int >""'"); 
+    }  
+    if (!argp3) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "CUDAconvertFloatFloat" "', argument " "3"" of type '" "std::pair< int,int >""'");
+    } else {
+      std::pair< int,int > * temp = reinterpret_cast< std::pair< int,int > * >(argp3);
+      arg3 = *temp;
+      if (SWIG_IsNewObj(res3)) delete temp;
+    }
+  }
+  CUDAconvertFloat< float >(arg1,*arg2,arg3);
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_CUDAsqrtFloat(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  float **arg1 = (float **) 0 ;
+  float ***arg2 = 0 ;
+  std::pair< int,int > arg3 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  void *argp3 ;
+  int res3 = 0 ;
+  PyObject *swig_obj[3] ;
+  
+  if (!SWIG_Python_UnpackTuple(args, "CUDAsqrtFloat", 3, 3, swig_obj)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_p_float, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "CUDAsqrtFloat" "', argument " "1"" of type '" "float **""'"); 
+  }
+  arg1 = reinterpret_cast< float ** >(argp1);
+  res2 = SWIG_ConvertPtr(swig_obj[1], &argp2, SWIGTYPE_p_p_p_float,  0 );
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "CUDAsqrtFloat" "', argument " "2"" of type '" "float **&""'"); 
+  }
+  if (!argp2) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "CUDAsqrtFloat" "', argument " "2"" of type '" "float **&""'"); 
+  }
+  arg2 = reinterpret_cast< float *** >(argp2);
+  {
+    res3 = SWIG_ConvertPtr(swig_obj[2], &argp3, SWIGTYPE_p_std__pairT_int_int_t,  0  | 0);
+    if (!SWIG_IsOK(res3)) {
+      SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "CUDAsqrtFloat" "', argument " "3"" of type '" "std::pair< int,int >""'"); 
+    }  
+    if (!argp3) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "CUDAsqrtFloat" "', argument " "3"" of type '" "std::pair< int,int >""'");
+    } else {
+      std::pair< int,int > * temp = reinterpret_cast< std::pair< int,int > * >(argp3);
+      arg3 = *temp;
+      if (SWIG_IsNewObj(res3)) delete temp;
+    }
+  }
+  CUDAsqrt< float >(arg1,*arg2,arg3);
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
 
 SWIGINTERN PyObject *_wrap_IntVector_iterator(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
@@ -10574,6 +11138,50 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_FloatTensor_moveToDevice(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Tensor< float > *arg1 = (Tensor< float > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject *swig_obj[1] ;
+  
+  if (!args) SWIG_fail;
+  swig_obj[0] = args;
+  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_TensorT_float_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "FloatTensor_moveToDevice" "', argument " "1"" of type '" "Tensor< float > *""'"); 
+  }
+  arg1 = reinterpret_cast< Tensor< float > * >(argp1);
+  (arg1)->moveToDevice();
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_FloatTensor_moveToHost(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Tensor< float > *arg1 = (Tensor< float > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject *swig_obj[1] ;
+  
+  if (!args) SWIG_fail;
+  swig_obj[0] = args;
+  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_TensorT_float_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "FloatTensor_moveToHost" "', argument " "1"" of type '" "Tensor< float > *""'"); 
+  }
+  arg1 = reinterpret_cast< Tensor< float > * >(argp1);
+  (arg1)->moveToHost();
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *_wrap_FloatTensor_row_split(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   Tensor< float > *arg1 = (Tensor< float > *) 0 ;
@@ -11071,6 +11679,110 @@ SWIGINTERN PyObject *_wrap_FloatTensor_data_get(PyObject *SWIGUNUSEDPARM(self), 
   arg1 = reinterpret_cast< Tensor< float > * >(argp1);
   result = (float **) ((arg1)->data);
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_p_float, 0 |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_FloatTensor_device_data_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Tensor< float > *arg1 = (Tensor< float > *) 0 ;
+  float **arg2 = (float **) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject *swig_obj[2] ;
+  
+  if (!SWIG_Python_UnpackTuple(args, "FloatTensor_device_data_set", 2, 2, swig_obj)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_TensorT_float_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "FloatTensor_device_data_set" "', argument " "1"" of type '" "Tensor< float > *""'"); 
+  }
+  arg1 = reinterpret_cast< Tensor< float > * >(argp1);
+  res2 = SWIG_ConvertPtr(swig_obj[1], &argp2,SWIGTYPE_p_p_float, 0 |  0 );
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "FloatTensor_device_data_set" "', argument " "2"" of type '" "float **""'"); 
+  }
+  arg2 = reinterpret_cast< float ** >(argp2);
+  if (arg1) (arg1)->device_data = arg2;
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_FloatTensor_device_data_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Tensor< float > *arg1 = (Tensor< float > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject *swig_obj[1] ;
+  float **result = 0 ;
+  
+  if (!args) SWIG_fail;
+  swig_obj[0] = args;
+  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_TensorT_float_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "FloatTensor_device_data_get" "', argument " "1"" of type '" "Tensor< float > *""'"); 
+  }
+  arg1 = reinterpret_cast< Tensor< float > * >(argp1);
+  result = (float **) ((arg1)->device_data);
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_p_float, 0 |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_FloatTensor_device_count_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Tensor< float > *arg1 = (Tensor< float > *) 0 ;
+  int arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  int val2 ;
+  int ecode2 = 0 ;
+  PyObject *swig_obj[2] ;
+  
+  if (!SWIG_Python_UnpackTuple(args, "FloatTensor_device_count_set", 2, 2, swig_obj)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_TensorT_float_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "FloatTensor_device_count_set" "', argument " "1"" of type '" "Tensor< float > *""'"); 
+  }
+  arg1 = reinterpret_cast< Tensor< float > * >(argp1);
+  ecode2 = SWIG_AsVal_int(swig_obj[1], &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "FloatTensor_device_count_set" "', argument " "2"" of type '" "int""'");
+  } 
+  arg2 = static_cast< int >(val2);
+  if (arg1) (arg1)->device_count = arg2;
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_FloatTensor_device_count_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Tensor< float > *arg1 = (Tensor< float > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject *swig_obj[1] ;
+  int result;
+  
+  if (!args) SWIG_fail;
+  swig_obj[0] = args;
+  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_TensorT_float_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "FloatTensor_device_count_get" "', argument " "1"" of type '" "Tensor< float > *""'"); 
+  }
+  arg1 = reinterpret_cast< Tensor< float > * >(argp1);
+  result = (int) ((arg1)->device_count);
+  resultobj = SWIG_From_int(static_cast< int >(result));
   return resultobj;
 fail:
   return NULL;
@@ -15832,6 +16544,16 @@ static PyMethodDef SwigMethods[] = {
 	 { "SwigPyIterator___add__", _wrap_SwigPyIterator___add__, METH_VARARGS, NULL},
 	 { "SwigPyIterator___sub__", _wrap_SwigPyIterator___sub__, METH_VARARGS, NULL},
 	 { "SwigPyIterator_swigregister", SwigPyIterator_swigregister, METH_O, NULL},
+	 { "CUDAscalarMultiplyFloat", _wrap_CUDAscalarMultiplyFloat, METH_VARARGS, NULL},
+	 { "CUDAMultiplyFloat", _wrap_CUDAMultiplyFloat, METH_VARARGS, NULL},
+	 { "CUDAscalarAddFloat", _wrap_CUDAscalarAddFloat, METH_VARARGS, NULL},
+	 { "CUDAdivideFloat", _wrap_CUDAdivideFloat, METH_VARARGS, NULL},
+	 { "CUDAaddFloat", _wrap_CUDAaddFloat, METH_VARARGS, NULL},
+	 { "CUDAelemMultiplyFloat", _wrap_CUDAelemMultiplyFloat, METH_VARARGS, NULL},
+	 { "CUDAflattenFloat", _wrap_CUDAflattenFloat, METH_VARARGS, NULL},
+	 { "CUDAreshapeFloat", _wrap_CUDAreshapeFloat, METH_VARARGS, NULL},
+	 { "CUDAconvertFloatFloat", _wrap_CUDAconvertFloatFloat, METH_VARARGS, NULL},
+	 { "CUDAsqrtFloat", _wrap_CUDAsqrtFloat, METH_VARARGS, NULL},
 	 { "IntVector_iterator", _wrap_IntVector_iterator, METH_O, NULL},
 	 { "IntVector___nonzero__", _wrap_IntVector___nonzero__, METH_O, NULL},
 	 { "IntVector___bool__", _wrap_IntVector___bool__, METH_O, NULL},
@@ -15920,6 +16642,8 @@ static PyMethodDef SwigMethods[] = {
 	 { "FloatTensor_sqrt", _wrap_FloatTensor_sqrt, METH_O, NULL},
 	 { "FloatTensor_randomTensor", _wrap_FloatTensor_randomTensor, METH_VARARGS, NULL},
 	 { "FloatTensor_randomFloatTensor", _wrap_FloatTensor_randomFloatTensor, METH_O, NULL},
+	 { "FloatTensor_moveToDevice", _wrap_FloatTensor_moveToDevice, METH_O, NULL},
+	 { "FloatTensor_moveToHost", _wrap_FloatTensor_moveToHost, METH_O, NULL},
 	 { "FloatTensor_row_split", _wrap_FloatTensor_row_split, METH_O, NULL},
 	 { "FloatTensor_input_output_split", _wrap_FloatTensor_input_output_split, METH_VARARGS, NULL},
 	 { "delete_FloatTensor", _wrap_delete_FloatTensor, METH_O, NULL},
@@ -15939,6 +16663,10 @@ static PyMethodDef SwigMethods[] = {
 	 { "FloatTensor_printTensor", _wrap_FloatTensor_printTensor, METH_O, NULL},
 	 { "FloatTensor_data_set", _wrap_FloatTensor_data_set, METH_VARARGS, NULL},
 	 { "FloatTensor_data_get", _wrap_FloatTensor_data_get, METH_O, NULL},
+	 { "FloatTensor_device_data_set", _wrap_FloatTensor_device_data_set, METH_VARARGS, NULL},
+	 { "FloatTensor_device_data_get", _wrap_FloatTensor_device_data_get, METH_O, NULL},
+	 { "FloatTensor_device_count_set", _wrap_FloatTensor_device_count_set, METH_VARARGS, NULL},
+	 { "FloatTensor_device_count_get", _wrap_FloatTensor_device_count_get, METH_O, NULL},
 	 { "FloatTensor_size_set", _wrap_FloatTensor_size_set, METH_VARARGS, NULL},
 	 { "FloatTensor_size_get", _wrap_FloatTensor_size_get, METH_O, NULL},
 	 { "FloatTensor_swigregister", FloatTensor_swigregister, METH_O, NULL},
@@ -16173,6 +16901,7 @@ static swig_type_info _swigt__p_f_p_float__void = {"_p_f_p_float__void", "void (
 static swig_type_info _swigt__p_first_type = {"_p_first_type", "first_type *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_p_PyObject = {"_p_p_PyObject", "PyObject **", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_p_float = {"_p_p_float", "float **", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_p_p_float = {"_p_p_p_float", "float ***", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_second_type = {"_p_second_type", "second_type *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_size_type = {"_p_size_type", "size_type *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_std__allocatorT_TensorT_float_t_t = {"_p_std__allocatorT_TensorT_float_t_t", "std::vector< Tensor< float > >::allocator_type *|std::allocator< Tensor< float > > *", 0, 0, (void*)0, 0};
@@ -16211,6 +16940,7 @@ static swig_type_info *swig_type_initial[] = {
   &_swigt__p_first_type,
   &_swigt__p_p_PyObject,
   &_swigt__p_p_float,
+  &_swigt__p_p_p_float,
   &_swigt__p_second_type,
   &_swigt__p_size_type,
   &_swigt__p_std__allocatorT_TensorT_float_t_t,
@@ -16249,6 +16979,7 @@ static swig_cast_info _swigc__p_f_p_float__void[] = {  {&_swigt__p_f_p_float__vo
 static swig_cast_info _swigc__p_first_type[] = {  {&_swigt__p_first_type, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_p_PyObject[] = {  {&_swigt__p_p_PyObject, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_p_float[] = {  {&_swigt__p_p_float, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_p_p_float[] = {  {&_swigt__p_p_p_float, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_second_type[] = {  {&_swigt__p_second_type, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_size_type[] = {  {&_swigt__p_size_type, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_std__allocatorT_TensorT_float_t_t[] = {  {&_swigt__p_std__allocatorT_TensorT_float_t_t, 0, 0, 0},{0, 0, 0, 0}};
@@ -16287,6 +17018,7 @@ static swig_cast_info *swig_cast_initial[] = {
   _swigc__p_first_type,
   _swigc__p_p_PyObject,
   _swigc__p_p_float,
+  _swigc__p_p_p_float,
   _swigc__p_second_type,
   _swigc__p_size_type,
   _swigc__p_std__allocatorT_TensorT_float_t_t,

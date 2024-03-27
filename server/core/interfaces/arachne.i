@@ -1,6 +1,9 @@
 %module arachne
 
 %{
+#include <utility>
+#include <cuda_runtime.h>
+#include "kernels/kernels.hpp"
 #include "Tensor.hpp"
 #include "Model.hpp"
 #include "Activation.hpp"
@@ -23,6 +26,19 @@
 %include <std_string.i>
 %include <std_vector.i>
 %include <std_pair.i>
+%include "kernels/kernels.hpp"
+
+%template(CUDAscalarMultiplyFloat) CUDAscalarMultiply<float>;
+%template(CUDAMultiplyFloat) CUDAMultiply<float>;
+%template(CUDAscalarAddFloat) CUDAscalarAdd<float>;
+%template(CUDAdivideFloat) CUDAdivide<float>;
+%template(CUDAaddFloat) CUDAadd<float>;
+%template(CUDAelemMultiplyFloat) CUDAelemMultiply<float>;
+%template(CUDAflattenFloat) CUDAflatten<float>;
+%template(CUDAreshapeFloat) CUDAreshape<float>;
+%template(CUDAconvertFloatFloat) CUDAconvertFloat<float>;
+%template(CUDAsqrtFloat) CUDAsqrt<float>;
+
 %include "Tensor.hpp"
 namespace std {
     %template(IntVector) vector<int>;

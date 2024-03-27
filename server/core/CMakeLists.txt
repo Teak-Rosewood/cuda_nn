@@ -14,7 +14,7 @@ set(CMAKE_CXX_STANDARD 11)
 # set(CMAKE_CXX_FLAGS_DEBUG "-g")
 
 # Specify source and header files for the shared library
-file(GLOB_RECURSE CUDA_SOURCES "src/.cu")
+file(GLOB_RECURSE CUDA_SOURCES "include/*.cu")
 file(GLOB_RECURSE CPP_SOURCES "src/*.cpp")
 file(GLOB_RECURSE CUDA_HEADERS "include/*.hpp")
 
@@ -25,9 +25,7 @@ set(CUDA_NVCC_FLAGS ${CUDA_NVCC_FLAGS};-arch=sm_35;-O3;-Xcompiler -fPIC)
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)
 
-cuda_compile(cuda_objs ${CUDA_SOURCES})
-
-add_library(arachne SHARED ${cuda_objs} ${SOURCES})
+cuda_add_library(arachne SHARED ${SOURCES})
 target_link_libraries(arachne ${CUDA_LIBRARIES})
 
 if(OpenMP_CXX_FOUND)
@@ -39,19 +37,18 @@ set_target_properties(arachne PROPERTIES LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY
 
 # Specify source and header files for the executables
 # file(GLOB_RECURSE MAIN_SOURCES "src/model.cu" "src/main.cpp")
-file(GLOB_RECURSE TEST_SOURCES "src/test.cpp")
+# file(GLOB_RECURSE TEST_SOURCES "src/test.cpp")
 
 # cuda_add_executable(main ${HEADERS} ${MAIN_SOURCES})
-cuda_add_executable(test ${HEADERS} ${TEST_SOURCES})
 
-set_target_properties(test PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
+# set_target_properties(test PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 
 set(CMAKE_SWIG_FLAGS "")
 set(CMAKE_SWIG_OUTDIR ${CMAKE_CURRENT_SOURCE_DIR})
 set_property(SOURCE interfaces/arachne.i PROPERTY CPLUSPLUS ON)
 set_property(SOURCE interfaces/arachne.i PROPERTY SWIG_OUTFILE_DIR ${CMAKE_SOURCE_DIR})
 swig_add_library(arachne_nn LANGUAGE python SOURCES interfaces/arachne.i ${HEADERS})
-swig_link_libraries(arachne_nn ${PYTHON_LIBRARIES})
+swig_link_libraries(arachne_nn ${PYTHON_LIBRARIES} arachne)
 set_target_properties(arachne_nn PROPERTIES
     LIBRARY_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}
 )
