@@ -25,3 +25,4 @@ void CUDAscalarAdd(T** device_data, T to_add, T**& device_data_added, std::pair<
 
     scalarAddKernel<T><<<gridSize, blockSize>>>(device_data, to_add, device_data_added, size.first, size.second);
 }
+template void CUDAscalarAdd<float>(float** device_data, float to_add, float**& device_data_added, std::pair<int, int> size);

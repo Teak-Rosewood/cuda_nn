@@ -61,6 +61,8 @@ class _SwigNonDynamicMeta(type):
     __setattr__ = _swig_setattr_nondynamic_class_variable(type.__setattr__)
 
 
+import weakref
+
 class SwigPyIterator(object):
     thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc="The membership flag")
 
@@ -147,8 +149,8 @@ def CUDAflattenFloat(device_data, device_data_flattened, size):
 def CUDAreshapeFloat(device_data, device_data_reshaped, oldSize, newSize):
     return _arachne_nn.CUDAreshapeFloat(device_data, device_data_reshaped, oldSize, newSize)
 
-def CUDAconvertFloatFloat(device_data, device_data_float, size):
-    return _arachne_nn.CUDAconvertFloatFloat(device_data, device_data_float, size)
+def CUDAconvertFloatFloat(device_data, size):
+    return _arachne_nn.CUDAconvertFloatFloat(device_data, size)
 
 def CUDAsqrtFloat(device_data, device_data_sqrt, size):
     return _arachne_nn.CUDAsqrtFloat(device_data, device_data_sqrt, size)
@@ -430,6 +432,12 @@ class FloatTensor(object):
 
     def moveToHost(self):
         return _arachne_nn.FloatTensor_moveToHost(self)
+
+    def deleteDeviceData(self):
+        return _arachne_nn.FloatTensor_deleteDeviceData(self)
+
+    def deleteHostData(self):
+        return _arachne_nn.FloatTensor_deleteHostData(self)
 
     def row_split(self):
         return _arachne_nn.FloatTensor_row_split(self)
@@ -733,6 +741,7 @@ class Pipeline(object):
 
     def __init__(self):
         _arachne_nn.Pipeline_swiginit(self, _arachne_nn.new_Pipeline())
+    __swig_destroy__ = _arachne_nn.delete_Pipeline
 
     def add(self, arg2):
         return _arachne_nn.Pipeline_add(self, arg2)
@@ -751,7 +760,6 @@ class Pipeline(object):
 
     def load(self, filename):
         return _arachne_nn.Pipeline_load(self, filename)
-    __swig_destroy__ = _arachne_nn.delete_Pipeline
 
     def forwardFloat(self, input):
         return _arachne_nn.Pipeline_forwardFloat(self, input)

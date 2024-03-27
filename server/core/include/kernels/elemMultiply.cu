@@ -28,3 +28,4 @@ void CUDAelemMultiply(T** device_data_a, T** device_data_b, T**& device_data_mul
     // Launch the elemMultiplyKernel
     elemMultiplyKernel<T><<<gridSize, blockSize>>>(device_data_a, device_data_b, device_data_multiplied, size.first, size.second);
 }
+template void CUDAelemMultiply<float>(float** device_data_a, float** device_data_b, float**& device_data_multiplied, std::pair<int, int> size);

@@ -60,7 +60,9 @@ void Model::OMPbackward(Tensor<float> gradient,bool local)
 
 void Model::computeGradients(Tensor<float> last_gradient,Tensor<float>& gradient,bool local)
 {
+        std::cout << "Before issues" << std::endl;
     Tensor<float> grad = Tensor <float> (*inputs * last_gradient);
+        std::cout << "after issues" << std::endl;
 
     if(local)
     {

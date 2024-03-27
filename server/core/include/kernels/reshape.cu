@@ -27,3 +27,4 @@ void CUDAreshape(T** device_data, T**& device_data_reshaped, std::pair<int, int>
     // Launch the reshapeKernel
     reshapeKernel<T><<<numBlocks, numThreads>>>(device_data, device_data_reshaped, oldSize.second, newSize.first, newSize.second);
 }
+template void CUDAreshape<float>(float** device_data, float**& device_data_reshaped, std::pair<int, int> oldSize, std::pair<int, int> newSize);

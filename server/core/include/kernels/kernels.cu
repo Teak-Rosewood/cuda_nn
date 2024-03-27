@@ -2,10 +2,10 @@
 #define KERNELS_H
 
 template <typename T>
-__global__ void transposeKernel(T* input, T* output, int width, int height);
+__global__ void transposeKernel(T** data, int width, int height);
 
 template <typename T>
-__global__ void multiplyKernel(T* a, T* b, T* c, int widthA, int heightA, int widthB);
+__global__ void multiplyKernel(T** a, T** b, T** c, int widthA, int heightA, int widthB);
 
 template <typename T>
 __global__ void scalarMultiplyKernel(T** a, T multiplicand, T** c, int rows, int cols);
@@ -23,7 +23,7 @@ template <typename T>
 __global__ void elemMultiplyKernel(T** a, T** b, T** c, int rows, int cols);
 
 template <typename T>
-__global__ void convertFloatKernel(T** a, float** b, int rows, int cols);
+__global__ void convertFloatKernel(T** data, int rows, int cols);
 
 template <typename T>
 __global__ void sqrtKernel(T** a, float** b, int rows, int cols);

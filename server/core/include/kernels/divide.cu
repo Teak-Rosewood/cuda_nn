@@ -25,3 +25,4 @@ void CUDAdivide(T** device_data_a, T** device_data_b, T**& device_data_divided, 
 
     divideKernel<T><<<gridSize, blockSize>>>(device_data_a, device_data_b, device_data_divided, size.first, size.second);
 }
+template void CUDAdivide<float>(float** device_data_a, float** device_data_b, float**& device_data_divided, std::pair<int, int> size);

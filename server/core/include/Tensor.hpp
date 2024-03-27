@@ -61,6 +61,8 @@ public:
     // CUDA Memory Management
     void moveToDevice();
     void moveToHost();
+    void deleteDeviceData();
+    void deleteHostData();
 
     vector<Tensor<T>> row_split();
     std::pair<Tensor<T>, Tensor<T>> input_output_split(vector<int>);
@@ -237,9 +239,13 @@ void Tensor<T>::transpose()
 {
     if (this->device_count > 0)
     {
-        T **device_data_transposed;
-        CUDATranspose<T>(this->device_data, device_data_transposed, this->size);
-        this->device_data = device_data_transposed;
+        T **to_delete = this->data;
+        for (int i = 0; i < this->size.first; i++)
+        {
+            delete[] to_delete[i];
+        }
+        delete[] to_delete;
+        CUDATranspose<T>(this->device_data, this->size);
     }
     else
     {
@@ -285,13 +291,9 @@ Tensor<T> Tensor<T>::multiply(Tensor<T> b)
 
     if (this->device_count > 0)
     {
-        T **device_data_multiplied;
-        CUDAMultiply<T>(this->device_data, b.device_data, device_data_multiplied, this->size, b.size);
-
         Tensor<T> output(ml_size, 0);
-        output.device_data = device_data_multiplied;
+        CUDAMultiply<T>(this->device_data, b.device_data, output.device_data, this->size, b.size);
         output.moveToHost();
-
         return output;
     }
     else
@@ -655,11 +657,9 @@ Tensor<float> Tensor<T>::convertFloat()
     if (this->device_count > 0)
     {
         T **floatTensor;
-        CUDAconvertFloat<T>(this->device_data, floatTensor, this->size);
-
-        Tensor<float> output(floatTensor, this->size);
-        output.device_data = floatTensor;
-
+        CUDAconvertFloat<T>(this->device_data, this->size);
+        moveToHost();
+        Tensor<float> output(this->data, this->size);
         return output;
     }
     else
@@ -765,7 +765,7 @@ Tensor<T> Tensor<T>::flatten()
     }
     else
     {
-        T** data = new T*[1];
+        T **data = new T *[1];
         data[0] = new T[this->size.first * this->size.second];
 
         int index = 0;
@@ -921,13 +921,16 @@ Tensor<T> &Tensor<T>::operator=(const Tensor &other)
         if (other.device_count > 0)
         {
             device_data = other.device_data;
+            moveToHost();
         }
-
-        data = new T *[size.first];
-        for (int i = 0; i < size.first; ++i)
+        else
         {
-            data[i] = new T[size.second];
-            std::copy(other.data[i], other.data[i] + size.second, data[i]);
+            data = new T *[size.first];
+            for (int i = 0; i < size.first; ++i)
+            {
+                data[i] = new T[size.second];
+                std::copy(other.data[i], other.data[i] + size.second, data[i]);
+            }
         }
 
         if (device_count > 0)
@@ -1236,6 +1239,10 @@ Tensor<T> Tensor<T>::Normalize()
     }
     Tensor<T> transposed_tensor = this->copy();
     transposed_tensor.transpose();
+    if (device_count > 0)
+    {
+        transposed_tensor.moveToHost();
+    }
 
     for (int i = 0; i < transposed_tensor.getSize().first; i++)
     {
@@ -1254,6 +1261,10 @@ Tensor<T> Tensor<T>::Normalize()
             transposed_tensor.data[i][j] = (transposed_tensor.data[i][j] - min) / (max - min);
         }
     }
+    if (device_count > 0)
+    {
+        transposed_tensor.moveToDevice();
+    }
     transposed_tensor.transpose();
     return transposed_tensor;
 }
@@ -1263,7 +1274,12 @@ void Tensor<T>::moveToDevice()
 {
     if (device_data != nullptr)
     {
-        throw std::runtime_error("Data is already on the device");
+        for (int i = 0; i < size.first; ++i)
+        {
+            cudaFree(device_data[i]);
+        }
+        delete[] device_data;
+        device_data = nullptr;
     }
 
     device_data = new T *[size.first];
@@ -1282,13 +1298,39 @@ void Tensor<T>::moveToHost()
         throw std::runtime_error("No data on the device to move to host");
     }
 
+    this->data = new T *[size.first];
     for (int i = 0; i < size.first; ++i)
     {
-        cudaMemcpy(data[i], device_data[i], size.second * sizeof(T), cudaMemcpyDeviceToHost);
+        this->data[i] = new T[size.second];
+        cudaMemcpy(this->data[i], device_data[i], size.second * sizeof(T), cudaMemcpyDeviceToHost);
         cudaFree(device_data[i]);
     }
-
-    delete[] device_data;
+    cudaFree(device_data);
     device_data = nullptr;
+}
+
+template <typename T>
+void Tensor<T>::deleteDeviceData()
+{
+    if (device_data != nullptr)
+    {
+        for (int i = 0; i < size.first; ++i)
+        {
+            cudaFree(device_data[i]);
+        }
+        delete[] device_data;
+        device_data = nullptr;
+    }
+}
+
+template <typename T>
+void Tensor<T>::deleteHostData()
+{
+    for (int i = 0; i < size.first; ++i)
+    {
+        delete[] data[i];
+    }
+    delete[] data;
+    data = nullptr;
 }
 #endif

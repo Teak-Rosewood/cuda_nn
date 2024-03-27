@@ -1,4 +1,5 @@
-%module arachne
+// %module arachne
+%module(directors="1") arachne
 
 %{
 #include <utility>
@@ -43,11 +44,6 @@
 namespace std {
     %template(IntVector) vector<int>;
     %template(FloatTensorVector) vector<Tensor<float>>;
-}
-%extend Pipeline {
-    ~Pipeline() {
-
-    }
 }
 %template(FloatTensor) Tensor<float>;
 namespace std {

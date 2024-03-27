@@ -25,3 +25,5 @@ void CUDAscalarMultiply(T** device_data, float multiplicand, T**& device_data_mu
 
     scalarMultiplyKernel<T><<<gridSize, blockSize>>>(device_data, multiplicand, device_data_multiplied, size.first, size.second);
 }
+
+template void CUDAscalarMultiply<float>(float** device_data, float multiplicand, float**& device_data_multiplied, std::pair<int, int> size);

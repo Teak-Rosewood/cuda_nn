@@ -28,3 +28,5 @@ void CUDAsqrt(T** device_data, float**& device_data_sqrt, std::pair<int, int> si
     // Launch the sqrtKernel
     sqrtKernel<T><<<gridSize, blockSize>>>(device_data, device_data_sqrt, size.first, size.second);
 }
+
+template void CUDAsqrt<float>(float** device_data, float**& device_data_sqrt, std::pair<int, int> size);

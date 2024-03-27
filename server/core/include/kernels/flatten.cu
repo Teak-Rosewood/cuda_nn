@@ -24,3 +24,4 @@ void CUDAflatten(T** device_data, T*& device_data_flattened, std::pair<int, int>
     // Launch the flattenKernel
     flattenKernel<T><<<numBlocks, numThreads>>>(device_data, device_data_flattened, size.first, size.second);
 }
+template void CUDAflatten<float>(float** device_data, float*& device_data_flattened, std::pair<int, int> size);

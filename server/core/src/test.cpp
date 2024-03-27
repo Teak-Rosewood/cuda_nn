@@ -43,24 +43,27 @@ int main()
 
 
     myPipeline.printPipeline();
-    myPipeline.load("hello.arachne");
+    // myPipeline.load("hello.arachne");
     Adam  optimizer(1e-5);
 
     auto start = std::chrono::high_resolution_clock::now();
 
-    // for(int j=0;j<40;j++)
-    // {
-    //     float loss = 0;
-    //     for(int i=0;i<input_list.size();i++)
-    //     {
-    //         input = input_list[i];
-    //         output = output_list[i];
-    //         Tensor<float> pred = myPipeline.forward(input);
-    //         loss += loss_fn.loss(pred,output);
-    //         myPipeline.backward(&optimizer,&loss_fn,output);
-    //     }
-    //     cout<<"Loss at epoch "<<j<<": "<<loss<<endl;
-    // }
+    for(int j=0;j<40;j++)
+    {
+        float loss = 0;
+        for(int i=0;i<input_list.size();i++)
+        {
+            input = input_list[i];
+            output = output_list[i];
+            Tensor<float> pred = myPipeline.forward(input);
+            cout<< "Here 1" << endl;
+            loss += loss_fn.loss(pred,output);
+            cout<< "Here 2" << endl;
+            myPipeline.backward(&optimizer,&loss_fn,output);
+            cout<< "Here 3" << endl;
+        }
+        cout<<"Loss at epoch "<<j<<": "<<loss<<endl;
+    }
 
     auto end = std::chrono::high_resolution_clock::now();
     std::chrono::duration<double> duration = end - start;

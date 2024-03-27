@@ -12,7 +12,6 @@ __global__ void addKernel(T** a, T** b, T** c, int rows, int cols)
         c[row][col] = a[row][col] + b[row][col];
     }
 }
-
 template <typename T>
 void CUDAadd(T** device_data_a, T** device_data_b, T**& device_data_added, std::pair<int, int> size) {
     // Allocate memory for the added data
@@ -28,3 +27,4 @@ void CUDAadd(T** device_data_a, T** device_data_b, T**& device_data_added, std::
     // Launch the addKernel
     addKernel<T><<<gridSize, blockSize>>>(device_data_a, device_data_b, device_data_added, size.first, size.second);
 }
+template void CUDAadd<float>(float** device_data_a, float** device_data_b, float**& device_data_added, std::pair<int, int> size);
