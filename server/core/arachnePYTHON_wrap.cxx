@@ -11625,6 +11625,28 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_FloatTensor_allocateToHost(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Tensor< float > *arg1 = (Tensor< float > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject *swig_obj[1] ;
+  
+  if (!args) SWIG_fail;
+  swig_obj[0] = args;
+  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_TensorT_float_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "FloatTensor_allocateToHost" "', argument " "1"" of type '" "Tensor< float > *""'"); 
+  }
+  arg1 = reinterpret_cast< Tensor< float > * >(argp1);
+  (arg1)->allocateToHost();
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *_wrap_FloatTensor_row_split(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   Tensor< float > *arg1 = (Tensor< float > *) 0 ;
@@ -17089,6 +17111,7 @@ static PyMethodDef SwigMethods[] = {
 	 { "FloatTensor_moveToHost", _wrap_FloatTensor_moveToHost, METH_O, NULL},
 	 { "FloatTensor_deleteDeviceData", _wrap_FloatTensor_deleteDeviceData, METH_O, NULL},
 	 { "FloatTensor_deleteHostData", _wrap_FloatTensor_deleteHostData, METH_O, NULL},
+	 { "FloatTensor_allocateToHost", _wrap_FloatTensor_allocateToHost, METH_O, NULL},
 	 { "FloatTensor_row_split", _wrap_FloatTensor_row_split, METH_O, NULL},
 	 { "FloatTensor_input_output_split", _wrap_FloatTensor_input_output_split, METH_VARARGS, NULL},
 	 { "delete_FloatTensor", _wrap_delete_FloatTensor, METH_O, NULL},

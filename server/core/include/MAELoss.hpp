@@ -30,6 +30,8 @@ float MAELoss::loss(Tensor<float> prediction,Tensor<float> actual)
 
 Tensor<float> MAELoss::derivative(Tensor<float> prediction,Tensor<float> actual)
 {
+    prediction.moveToHost();
+    actual.moveToHost();
     Tensor<float> derivative(prediction.getSize(),0.0);
 
     for (int i = 0; i < prediction.getSize().first; ++i) {
@@ -44,7 +46,7 @@ Tensor<float> MAELoss::derivative(Tensor<float> prediction,Tensor<float> actual)
             }
         }
     }
-
+    derivative.moveToDevice();
     return derivative;
 }
 

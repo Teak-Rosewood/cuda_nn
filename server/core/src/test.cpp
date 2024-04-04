@@ -15,22 +15,22 @@ using namespace std;
 int main()
 {
     Tensor<float> dat = Tensor<float>::readCSV("WineQT.csv");
-    dat = dat.Normalize();
+    // dat = dat.Normalize();
     std::vector<int> ind;
     ind.push_back(11);
-    std::pair<Tensor<float>,Tensor<float>> vals = dat.input_output_split(ind);
+    std::pair<Tensor<float>, Tensor<float>> vals = dat.input_output_split(ind);
     Tensor<float> input = vals.first;
     Tensor<float> output = vals.second;
     vector<Tensor<float>> input_list = input.row_split();
     vector<Tensor<float>> output_list = output.row_split();
 
     Pipeline myPipeline;
-    Linear* q = new Linear(make_pair(1,12),6);
-    Relu* r = new Relu(make_pair(1,6));
-    Linear* d = new Linear(make_pair(1,6),3);
-    Relu *e = new Relu(make_pair(1,3));
-    Linear *f = new Linear(make_pair(1,3),1);
-    Relu *g = new Relu(make_pair(1,1));
+    Linear *q = new Linear(make_pair(1, 12), 6);
+    Relu *r = new Relu(make_pair(1, 6));
+    Linear *d = new Linear(make_pair(1, 6), 3);
+    Relu *e = new Relu(make_pair(1, 3));
+    Linear *f = new Linear(make_pair(1, 3), 1);
+    Relu *g = new Relu(make_pair(1, 1));
 
     MSELoss loss_fn;
 
@@ -41,28 +41,36 @@ int main()
     myPipeline.add(f);
     myPipeline.add(g);
 
-
     myPipeline.printPipeline();
     // myPipeline.load("hello.arachne");
-    Adam  optimizer(1e-5);
+    Adam optimizer(0.00001);
 
     auto start = std::chrono::high_resolution_clock::now();
 
-    for(int j=0;j<40;j++)
+    for (int j = 0; j < 40; j++)
     {
         float loss = 0;
-        for(int i=0;i<input_list.size();i++)
+        for (int i = 0; i < input_list.size(); i++)
         {
             input = input_list[i];
             output = output_list[i];
+
+            if (i == 0)
+            {
+                cout << "Output before forward prop: " << endl;
+                output.printTensor();
+            }
             Tensor<float> pred = myPipeline.forward(input);
-            cout<< "Here 1" << endl;
-            loss += loss_fn.loss(pred,output);
-            cout<< "Here 2" << endl;
-            myPipeline.backward(&optimizer,&loss_fn,output);
-            cout<< "Here 3" << endl;
+            if (i == 0)
+            {
+                cout << "Output after forward prop: " << endl;
+                output.printTensor();
+            }
+            loss += loss_fn.loss(pred, output);
+
+            myPipeline.backward(&optimizer, &loss_fn, output);
         }
-        cout<<"Loss at epoch "<<j<<": "<<loss<<endl;
+        cout << "Loss at epoch " << j << ": " << loss << endl;
     }
 
     auto end = std::chrono::high_resolution_clock::now();
@@ -70,22 +78,24 @@ int main()
     std::cout << "Time taken: " << duration.count() << " seconds" << std::endl;
     int correct = 0;
     int close = 0;
-    for(int i=0;i<input_list.size();i++)
+    for (int i = 0; i < input_list.size(); i++)
     {
         input = input_list[i];
         output = output_list[i];
         Tensor<float> pred = myPipeline.forward(input);
-        int actual = std::round(output.data[0][0]*5+3);
-        int prediction = std::round(pred.data[0][0]*5+3);
+        output.moveToHost();
+        pred.moveToHost();
+        int actual = std::round(output.data[0][0] * 5 + 3);
+        int prediction = std::round(pred.data[0][0] * 5 + 3);
 
-        if(prediction == actual)
+        if (prediction == actual)
             correct++;
-        if(abs(prediction-actual)<=1)
+        if (abs(prediction - actual) <= 1)
             close++;
     }
 
-    cout<<"Accuracy: "<<float(correct)*100/input_list.size()<<"%"<<endl;
-    cout<<"Close prediction: "<<float(close)*100/input_list.size()<<"%"<<endl;
+    cout << "Accuracy: " << float(correct) * 100 / input_list.size() << "%" << endl;
+    cout << "Close prediction: " << float(close) * 100 / input_list.size() << "%" << endl;
 
     // myPipeline.save("hello");
 }

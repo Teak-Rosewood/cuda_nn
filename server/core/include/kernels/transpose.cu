@@ -25,5 +25,6 @@ void CUDATranspose(T** device_data, std::pair<int, int>& size) {
     transposeKernel<T><<<gridSize, blockSize>>>(device_data, size.second, size.first);
 
     size = std::make_pair(size.second, size.first);
+    cudaDeviceSynchronize(); // Wait for CUDA to finish
 }
 template void CUDATranspose<float>(float** device_data, std::pair<int, int>& size);

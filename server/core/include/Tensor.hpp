@@ -63,6 +63,7 @@ public:
     void moveToHost();
     void deleteDeviceData();
     void deleteHostData();
+    void allocateToHost();
 
     vector<Tensor<T>> row_split();
     std::pair<Tensor<T>, Tensor<T>> input_output_split(vector<int>);
@@ -96,7 +97,7 @@ public:
     pair<int, int> getSize();
     void printSize();
     void printTensor();
-    T **data;
+    T **data = nullptr;
     T **device_data = nullptr;
     int device_count = 0;
     pair<int, int> size;
@@ -109,20 +110,9 @@ private:
 template <typename T>
 Tensor<T>::~Tensor()
 {
-
-    if (device_data != nullptr)
-    {
-        this->moveToHost();
-    }
-    if (data != nullptr)
-    {
-        for (int i = 0; i < this->size.first; ++i)
-        {
-            if (data[i] != nullptr)
-                delete[] data[i];
-        }
-        delete[] data;
-    }
+    if (device_count > 0)
+        deleteDeviceData();
+    deleteHostData();
 }
 
 template <typename T>
@@ -130,11 +120,7 @@ Tensor<T>::Tensor(T **data, pair<int, int> size)
 {
     // Initialize data and size here if needed
     this->size = size;
-    this->data = new T *[size.first];
-    for (int i = 0; i < size.first; ++i)
-    {
-        this->data[i] = new T[size.second];
-    }
+    allocateToHost();
 
     for (int i = 0; i < size.first; i++)
     {
@@ -239,13 +225,9 @@ void Tensor<T>::transpose()
 {
     if (this->device_count > 0)
     {
-        T **to_delete = this->data;
-        for (int i = 0; i < this->size.first; i++)
-        {
-            delete[] to_delete[i];
-        }
-        delete[] to_delete;
+        deleteHostData();
         CUDATranspose<T>(this->device_data, this->size);
+        moveToHost();
     }
     else
     {
@@ -265,13 +247,7 @@ void Tensor<T>::transpose()
             }
         }
 
-        T **to_delete = this->data;
-        for (int i = 0; i < this->size.second; i++)
-        {
-            delete[] to_delete[i];
-        }
-        delete[] to_delete;
-
+        deleteHostData();
         this->data = temp_data;
     }
 }
@@ -293,6 +269,7 @@ Tensor<T> Tensor<T>::multiply(Tensor<T> b)
     {
         Tensor<T> output(ml_size, 0);
         CUDAMultiply<T>(this->device_data, b.device_data, output.device_data, this->size, b.size);
+        deleteHostData();
         output.moveToHost();
         return output;
     }
@@ -380,12 +357,8 @@ Tensor<T> Tensor<T>::scalarMultiply(float multiplicand)
 
     if (this->device_count > 0)
     {
-        T **device_data_multiplied;
-        CUDAscalarMultiply<T>(this->device_data, multiplicand, device_data_multiplied, this->size);
-
         Tensor<T> output(ml_size, 0);
-        output.device_data = device_data_multiplied;
-
+        CUDAscalarMultiply<T>(this->device_data, multiplicand, output.device_data, this->size);
         return output;
     }
     else
@@ -420,12 +393,8 @@ Tensor<T> Tensor<T>::scalarAdd(T to_add)
 
     if (this->device_count > 0)
     {
-        T **device_data_added;
-        CUDAscalarAdd<T>(this->device_data, to_add, device_data_added, this->size);
-
         Tensor<T> output(ml_size, 0);
-        output.device_data = device_data_added;
-
+        CUDAscalarAdd<T>(this->device_data, to_add, output.device_data, this->size);
         return output;
     }
     else
@@ -493,12 +462,8 @@ Tensor<T> Tensor<T>::divide(Tensor<T> divisor)
 
     if (this->device_count > 0)
     {
-        T **device_data_divided;
-        CUDAdivide<T>(this->device_data, divisor.device_data, device_data_divided, this->size);
-
         Tensor<T> output(ml_size, 0);
-        output.device_data = device_data_divided;
-
+        CUDAdivide<T>(this->device_data, divisor.device_data, output.device_data, this->size);
         return output;
     }
     else
@@ -536,12 +501,8 @@ Tensor<T> Tensor<T>::add(Tensor<T> adder)
 
     if (this->device_count > 0)
     {
-        T **device_data_added;
-        CUDAadd<T>(this->device_data, adder.device_data, device_data_added, this->size);
-
         Tensor<T> output(ml_size, 0);
-        output.device_data = device_data_added;
-
+        CUDAadd<T>(this->device_data, adder.device_data, output.device_data, this->size);
         return output;
     }
     else
@@ -579,12 +540,8 @@ Tensor<T> Tensor<T>::elem_multiply(Tensor<T> multiplier)
 
     if (this->device_count > 0)
     {
-        T **device_data_multiplied;
-        CUDAelemMultiply<T>(this->device_data, multiplier.device_data, device_data_multiplied, this->size);
-
         Tensor<T> output(ml_size, 0);
-        output.device_data = device_data_multiplied;
-
+        CUDAelemMultiply<T>(this->device_data, multiplier.device_data, output.device_data, this->size);
         return output;
     }
     else
@@ -646,6 +603,11 @@ Tensor<T> Tensor<T>::OMPadd(Tensor<T> adder)
 template <typename T>
 Tensor<T> Tensor<T>::copy()
 {
+    if (this->device_count > 0)
+    {
+        deleteHostData();
+        this->moveToHost();
+    }
     return Tensor<T>(this->data, this->size);
 }
 
@@ -656,7 +618,6 @@ Tensor<float> Tensor<T>::convertFloat()
 
     if (this->device_count > 0)
     {
-        T **floatTensor;
         CUDAconvertFloat<T>(this->device_data, this->size);
         moveToHost();
         Tensor<float> output(this->data, this->size);
@@ -689,20 +650,16 @@ Tensor<float> Tensor<T>::convertFloat()
 template <typename T>
 Tensor<float> Tensor<T>::sqrt()
 {
-    float **floatTensor;
 
     if (this->device_count > 0)
     {
-        T **sqrtTensor;
-        CUDAsqrt<T>(this->device_data, sqrtTensor, this->size);
-
-        Tensor<float> output(sqrtTensor, this->size);
-        output.device_data = sqrtTensor;
-
+        Tensor<float> output(this->size, 0);
+        CUDAsqrt<T>(this->device_data, output.device_data, this->size);
         return output;
     }
     else
     {
+        float **floatTensor;
         floatTensor = new float *[this->size.first];
         for (int i = 0; i < this->size.first; i++)
         {
@@ -730,7 +687,9 @@ void Tensor<T>::map(void (*func)(T *))
 {
     if (device_count > 0)
     {
+        deleteHostData();
         this->moveToHost();
+        deleteDeviceData();
     }
     for (int i = 0; i < this->size.first; i++)
     {
@@ -755,11 +714,13 @@ Tensor<T> Tensor<T>::flatten()
         CUDAflatten<T>(this->device_data, flatTensor, this->size);
 
         Tensor<T> output(make_pair(1, this->size.first * this->size.second), 0);
+        output.deleteDeviceData();
+        output.device_data = new T *[1];
+        output.device_data[0] = flatTensor;
+        output.moveToHost();
+        output.moveToDevice();
 
-        T **device_data = new T *[1];
-        device_data[0] = new T[this->size.first * this->size.second];
-        memcpy(device_data[0], flatTensor, this->size.first * this->size.second * sizeof(T));
-        output.device_data = device_data;
+        cudaFree(flatTensor);
 
         return output;
     }
@@ -905,22 +866,22 @@ Tensor<T> &Tensor<T>::operator=(const Tensor &other)
 {
     if (this != &other)
     {
-        if (device_data != nullptr)
-        {
-            this->moveToHost();
-        }
-
-        for (int i = 0; i < size.first; ++i)
-        {
-            delete[] data[i];
-        }
-        delete[] data;
+        if (device_count > 0)
+            deleteDeviceData();
+        deleteHostData();
 
         size = other.size;
         device_count = other.device_count;
+
         if (other.device_count > 0)
         {
-            device_data = other.device_data;
+            device_data = new T *[size.first];
+            for (int i = 0; i < size.first; ++i)
+            {
+                cudaMalloc(&device_data[i], size.second * sizeof(T));
+                cudaMemcpy(device_data[i], other.device_data[i], size.second * sizeof(T), cudaMemcpyDeviceToDevice);
+            }
+            cudaDeviceSynchronize();
             moveToHost();
         }
         else
@@ -960,18 +921,41 @@ Tensor<T> Tensor<T>::operator-(Tensor other)
 }
 
 template <typename T>
-Tensor<T>::Tensor(const Tensor &other) : size(other.size), device_count(other.device_count)
+Tensor<T>::Tensor(const Tensor &other) : device_count(other.device_count)
 {
-    data = new T *[size.first];
-    for (int i = 0; i < size.first; ++i)
-    {
-        data[i] = new T[size.second];
-        std::copy(other.data[i], other.data[i] + size.second, data[i]);
-    }
 
     if (device_count > 0)
     {
-        moveToDevice();
+        if (device_data != nullptr)
+        {
+            deleteDeviceData();
+            device_data = nullptr;
+        }
+        if (data != nullptr)
+        {
+            deleteHostData();
+            data = nullptr;
+        }
+        size = other.size;
+        device_data = new T *[size.first];
+        cudaError_t err;
+
+        for (int i = 0; i < size.first; ++i)
+        {
+            cudaMalloc(&device_data[i], size.second * sizeof(T));
+            cudaMemcpy(device_data[i], other.device_data[i], size.second * sizeof(T), cudaMemcpyDeviceToDevice);
+        }
+        cudaDeviceSynchronize();
+        moveToHost();
+    }
+    else
+    {
+        data = new T *[size.first];
+        for (int i = 0; i < size.first; ++i)
+        {
+            data[i] = new T[size.second];
+            std::copy(other.data[i], other.data[i] + size.second, data[i]);
+        }
     }
 }
 
@@ -985,12 +969,8 @@ Tensor<T> Tensor<T>::reshape(pair<int, int> size)
 
     if (device_count > 0)
     {
-        T **device_data_reshaped;
-        CUDAreshape<T>(this->device_data, device_data_reshaped, this->size, size);
-
         Tensor<T> output(size, 0);
-        output.device_data = device_data_reshaped;
-
+        CUDAreshape<T>(this->device_data, output.device_data, this->size, size);
         return output;
     }
 
@@ -1174,6 +1154,8 @@ vector<Tensor<T>> Tensor<T>::row_split()
 template <typename T>
 std::pair<Tensor<T>, Tensor<T>> Tensor<T>::input_output_split(vector<int> output_indices)
 {
+    if (device_count > 0)
+        moveToHost();
     for (int i : output_indices)
     {
         if (i >= this->getSize().second)
@@ -1207,7 +1189,6 @@ std::pair<Tensor<T>, Tensor<T>> Tensor<T>::input_output_split(vector<int> output
 
     Tensor<T> input = Tensor<T>(input_data, make_pair(this->getSize().first, this->getSize().second - output_indices.size()));
     Tensor<T> output = Tensor<T>(output_data, make_pair(this->getSize().first, output_indices.size()));
-
     for (int i = 0; i < this->getSize().first; i++)
     {
         delete[] input_data[i];
@@ -1233,16 +1214,10 @@ bool Tensor<T>::find(vector<int> indices, int value)
 template <typename T>
 Tensor<T> Tensor<T>::Normalize()
 {
-    if (device_count > 0)
-    {
-        this->moveToHost();
-    }
     Tensor<T> transposed_tensor = this->copy();
     transposed_tensor.transpose();
     if (device_count > 0)
-    {
         transposed_tensor.moveToHost();
-    }
 
     for (int i = 0; i < transposed_tensor.getSize().first; i++)
     {
@@ -1262,9 +1237,7 @@ Tensor<T> Tensor<T>::Normalize()
         }
     }
     if (device_count > 0)
-    {
         transposed_tensor.moveToDevice();
-    }
     transposed_tensor.transpose();
     return transposed_tensor;
 }
@@ -1274,12 +1247,7 @@ void Tensor<T>::moveToDevice()
 {
     if (device_data != nullptr)
     {
-        for (int i = 0; i < size.first; ++i)
-        {
-            cudaFree(device_data[i]);
-        }
-        delete[] device_data;
-        device_data = nullptr;
+        deleteDeviceData();
     }
 
     device_data = new T *[size.first];
@@ -1288,6 +1256,7 @@ void Tensor<T>::moveToDevice()
         cudaMalloc(&device_data[i], size.second * sizeof(T));
         cudaMemcpy(device_data[i], data[i], size.second * sizeof(T), cudaMemcpyHostToDevice);
     }
+    cudaDeviceSynchronize(); // Wait for CUDA to finish
 }
 
 template <typename T>
@@ -1297,16 +1266,15 @@ void Tensor<T>::moveToHost()
     {
         throw std::runtime_error("No data on the device to move to host");
     }
-
+    if (data != nullptr)
+        deleteHostData();
     this->data = new T *[size.first];
     for (int i = 0; i < size.first; ++i)
     {
         this->data[i] = new T[size.second];
         cudaMemcpy(this->data[i], device_data[i], size.second * sizeof(T), cudaMemcpyDeviceToHost);
-        cudaFree(device_data[i]);
     }
-    cudaFree(device_data);
-    device_data = nullptr;
+    cudaDeviceSynchronize(); // Wait for CUDA to finish
 }
 
 template <typename T>
@@ -1321,16 +1289,31 @@ void Tensor<T>::deleteDeviceData()
         delete[] device_data;
         device_data = nullptr;
     }
+    cudaDeviceSynchronize(); // Wait for CUDA to finish
 }
 
 template <typename T>
 void Tensor<T>::deleteHostData()
 {
+    if (data == nullptr)
+        return;
     for (int i = 0; i < size.first; ++i)
     {
         delete[] data[i];
     }
     delete[] data;
     data = nullptr;
+}
+
+template <typename T>
+void Tensor<T>::allocateToHost()
+{
+    if (data != nullptr)
+        deleteHostData();
+    this->data = new T *[size.first];
+    for (int i = 0; i < size.first; ++i)
+    {
+        this->data[i] = new T[size.second];
+    }
 }
 #endif

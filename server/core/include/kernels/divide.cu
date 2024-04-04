@@ -15,14 +15,16 @@ __global__ void divideKernel(T** a, T** b, T** c, int rows, int cols)
 
 template <typename T>
 void CUDAdivide(T** device_data_a, T** device_data_b, T**& device_data_divided, std::pair<int, int> size) {
-    cudaMalloc(&device_data_divided, size.first * sizeof(T *));
+    device_data_divided = new T*[size.first]; 
     for (int i = 0; i < size.first; ++i) {
         cudaMalloc(&device_data_divided[i], size.second * sizeof(T));
+        cudaMemset(device_data_divided[i], 0, size.second * sizeof(T));
     }
 
     dim3 blockSize(16, 16);
     dim3 gridSize((size.second + blockSize.x - 1) / blockSize.x, (size.first + blockSize.y - 1) / blockSize.y);
 
     divideKernel<T><<<gridSize, blockSize>>>(device_data_a, device_data_b, device_data_divided, size.first, size.second);
+    cudaDeviceSynchronize(); // Wait for CUDA to finish
 }
 template void CUDAdivide<float>(float** device_data_a, float** device_data_b, float**& device_data_divided, std::pair<int, int> size);

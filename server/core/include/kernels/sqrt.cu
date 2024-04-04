@@ -16,9 +16,10 @@ __global__ void sqrtKernel(T** a, float** b, int rows, int cols)
 template <typename T>
 void CUDAsqrt(T** device_data, float**& device_data_sqrt, std::pair<int, int> size) {
     // Allocate memory for the sqrt data
-    cudaMalloc(&device_data_sqrt, size.first * sizeof(float *));
+    device_data_sqrt = new float*[size.first];
     for (int i = 0; i < size.first; ++i) {
         cudaMalloc(&device_data_sqrt[i], size.second * sizeof(float));
+        cudaMemset(device_data_sqrt[i], 0, size.second * sizeof(float));
     }
 
     // Set up the grid and block dimensions
@@ -27,6 +28,7 @@ void CUDAsqrt(T** device_data, float**& device_data_sqrt, std::pair<int, int> si
 
     // Launch the sqrtKernel
     sqrtKernel<T><<<gridSize, blockSize>>>(device_data, device_data_sqrt, size.first, size.second);
+    cudaDeviceSynchronize(); // Wait for CUDA to finish
 }
 
 template void CUDAsqrt<float>(float** device_data, float**& device_data_sqrt, std::pair<int, int> size);

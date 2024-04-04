@@ -30,6 +30,12 @@ float MSELoss::loss(Tensor<float> prediction,Tensor<float> actual)
 
 Tensor<float> MSELoss::derivative(Tensor<float> prediction,Tensor<float> actual)
 {
+    if (prediction.device_count > 0) {
+        prediction.moveToHost();
+    }
+    if (actual.device_count > 0) {
+        actual.moveToHost();
+    }
     return prediction - actual;
 }
 

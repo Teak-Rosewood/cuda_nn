@@ -125,7 +125,6 @@ Tensor<float> Pipeline::forward(Tensor<T> input)
     graph.push_back(matrix);
     for (Model *model : network)
     {
-
         matrix = model->forward(matrix);
         if (dynamic_cast<Activation *>(model))
             graph.push_back(matrix);
@@ -151,11 +150,8 @@ Tensor<float> Pipeline::OMPforward(Tensor<T> input)
 
 void Pipeline::backward(Optimizer *optimizer, Loss *loss, Tensor<float> actual)
 {
-    std::cout << "Backward - 1" << std::endl;
     Tensor<float> last_gradient = loss->derivative(graph.back(), actual);
-    std::cout << "Backward - 2" << std::endl;
     Tensor<float> gradient = Tensor<float>(make_pair(1, 1), 0.0);
-    std::cout << "Backward - 3" << std::endl;
     int start = 0;
     for (int i = network.size() - 1; i >= 0; --i)
     {
@@ -172,7 +168,6 @@ void Pipeline::backward(Optimizer *optimizer, Loss *loss, Tensor<float> actual)
             }
         }
     }
-    std::cout << "Backward - 4" << std::endl;
 
     int count = 0;
     for (int i = network.size() - 1; i >= 0; --i)

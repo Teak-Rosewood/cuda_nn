@@ -16,9 +16,10 @@ __global__ void elemMultiplyKernel(T** a, T** b, T** c, int rows, int cols)
 template <typename T>
 void CUDAelemMultiply(T** device_data_a, T** device_data_b, T**& device_data_multiplied, std::pair<int, int> size) {
     // Allocate memory for the multiplied data
-    cudaMalloc(&device_data_multiplied, size.first * sizeof(T *));
+    device_data_multiplied = new T*[size.first];
     for (int i = 0; i < size.first; ++i) {
         cudaMalloc(&device_data_multiplied[i], size.second * sizeof(T));
+        cudaMemset(device_data_multiplied[i], 0, size.second * sizeof(T));
     }
 
     // Set up the grid and block dimensions
@@ -27,5 +28,6 @@ void CUDAelemMultiply(T** device_data_a, T** device_data_b, T**& device_data_mul
 
     // Launch the elemMultiplyKernel
     elemMultiplyKernel<T><<<gridSize, blockSize>>>(device_data_a, device_data_b, device_data_multiplied, size.first, size.second);
+    cudaDeviceSynchronize(); // Wait for CUDA to finish
 }
 template void CUDAelemMultiply<float>(float** device_data_a, float** device_data_b, float**& device_data_multiplied, std::pair<int, int> size);

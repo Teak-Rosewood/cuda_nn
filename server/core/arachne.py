@@ -439,6 +439,9 @@ class FloatTensor(object):
     def deleteHostData(self):
         return _arachne_nn.FloatTensor_deleteHostData(self)
 
+    def allocateToHost(self):
+        return _arachne_nn.FloatTensor_allocateToHost(self)
+
     def row_split(self):
         return _arachne_nn.FloatTensor_row_split(self)
 
